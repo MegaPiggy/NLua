@@ -114,7 +114,8 @@ namespace NLua
 
         public override string ToString()
         {
-            return "table";
+            string bstring = base.ToString();
+            return bstring == "nil" ? "table" : bstring;
         }
     }
 }

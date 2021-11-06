@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace NLua
 {
@@ -81,6 +82,15 @@ namespace NLua
         public override int GetHashCode()
         {
             return _Reference;
+        }
+
+        public override string ToString()
+        {
+            Lua lua;
+            if (!TryGet(out lua))
+                return "nil";
+
+            return (string)((lua.GetObjectFromPath("tostring") as LuaFunction).Call(this).FirstOrDefault());
         }
     }
 }

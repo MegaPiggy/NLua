@@ -81,7 +81,8 @@ namespace NLua
 
         public override string ToString()
         {
-            return "userdata";
+            string bstring = base.ToString();
+            return bstring == "nil" ? "userdata" : bstring;
         }
     }
 }

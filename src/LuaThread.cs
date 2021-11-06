@@ -91,7 +91,8 @@ namespace NLua
 
         public override string ToString()
         {
-            return "thread";
+            string bstring = base.ToString();
+            return bstring == "nil" ? "thread" : bstring;
         }
 
         public override bool Equals(object obj)

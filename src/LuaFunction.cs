@@ -63,7 +63,8 @@ namespace NLua
 
         public override string ToString()
         {
-            return "function";
+            string bstring = base.ToString();
+            return bstring == "nil" ? "function" : bstring;
         }
 
         public override bool Equals(object o)

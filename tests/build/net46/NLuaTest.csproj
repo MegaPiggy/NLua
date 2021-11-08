@@ -62,7 +62,13 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="test.cmd" />
+  </ItemGroup>
   <Import Project="..\..\src\NLuaTest.Shared.projitems" Label="Shared" />
   <Import Project="..\..\src\NLuaTest.Shared.Scripts.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"C:\Program Files (x86)\NUnit.org\nunit-console\nunit3-console.exe" $(TargetPath)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

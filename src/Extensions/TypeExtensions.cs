@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -46,12 +46,28 @@ namespace NLua.Extensions
             return t.HasMethod("op_Division");
         }
 
+        public static bool HasFloorDivisionOperator(this Type t)
+        {
+            if (t.IsPrimitive)
+                return true;
+
+            return t.HasMethod("op_FloorDivision");
+        }
+
         public static bool HasModulusOperator(this Type t)
         {
             if (t.IsPrimitive)
                 return true;
 
             return t.HasMethod("op_Modulus");
+        }
+
+        public static bool HasPowerOperator(this Type t)
+        {
+            if (t.IsPrimitive)
+                return true;
+
+            return t.HasMethod("op_Power");
         }
 
         public static bool HasUnaryNegationOperator(this Type t)
@@ -74,7 +90,6 @@ namespace NLua.Extensions
         {
             if (t.IsPrimitive)
                 return true;
-
             return t.HasMethod("op_LessThan");
         }
 
@@ -83,6 +98,48 @@ namespace NLua.Extensions
             if (t.IsPrimitive)
                 return true;
             return t.HasMethod("op_LessThanOrEqual");
+        }
+
+        public static bool HasBandOperator(this Type t)
+        {
+            if (t.IsPrimitive)
+                return true;
+            return t.HasMethod("op_BitwiseAnd");
+        }
+
+        public static bool HasBorOperator(this Type t)
+        {
+            if (t.IsPrimitive)
+                return true;
+            return t.HasMethod("op_BitwiseOr");
+        }
+
+        public static bool HasBxorOperator(this Type t)
+        {
+            if (t.IsPrimitive)
+                return true;
+            return t.HasMethod("op_ExclusiveOr");
+        }
+
+        public static bool HasBnotOperator(this Type t)
+        {
+            if (t.IsPrimitive)
+                return true;
+            return t.HasMethod("op_OnesComplement");
+        }
+
+        public static bool HasShlOperator(this Type t)
+        {
+            if (t.IsPrimitive)
+                return true;
+            return t.HasMethod("op_LeftShift");
+        }
+
+        public static bool HasShrOperator(this Type t)
+        {
+            if (t.IsPrimitive)
+                return true;
+            return t.HasMethod("op_RightShift");
         }
 
         public static MethodInfo[] GetMethods(this Type t, string name, BindingFlags flags)

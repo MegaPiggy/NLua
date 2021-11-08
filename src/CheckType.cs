@@ -37,13 +37,16 @@ namespace NLua
             _extractValues.Add(typeof(LuaTable), GetAsTable);
             _extractValues.Add(typeof(LuaThread), GetAsThread);
             _extractValues.Add(typeof(LuaUserData), GetAsUserdata);
+            _extractValues.Add(typeof(LuaLightUserData), GetAsLightUserdata);
+            _extractValues.Add(typeof(LuaFile), GetAsFile);
+            _extractValues.Add(typeof(LuaNumber), GetAsNumber);
             _extractNetObject = GetAsNetObject;
         }
 
-        /*
-         * Checks if the value at Lua stack index stackPos matches paramType, 
-         * returning a conversion function if it does and null otherwise.
-         */
+        /// <summary>
+        /// Checks if the value at Lua stack index stackPos matches <paramref name="paramType"/>.
+        /// </summary>
+        /// <returns>a conversion function if it does and <see langword="null"/> otherwise.</returns>
         internal ExtractValue GetExtractor(ProxyType paramType)
         {
             return GetExtractor(paramType.UnderlyingSystemType);
@@ -81,7 +84,9 @@ namespace NLua
                                      paramType == typeof(float) ||
                                      paramType == typeof(double) ||
                                      paramType == typeof(decimal) ||
-                                     paramType == typeof(byte);
+                                     paramType == typeof(byte) ||
+                                     paramType == typeof(sbyte) ||
+                                     paramType == typeof(LuaNumber);
 
             // If it is a nullable
             if (underlyingType != null)
@@ -114,8 +119,10 @@ namespace NLua
                     return _extractValues[typeof(object)];
                 if (luatype == LuaType.Function)
                     return _extractValues[typeof(LuaFunction)];
+                if (luatype == LuaType.LightUserData)
+                    return _extractValues[typeof(LuaLightUserData)];
                 if (luatype == LuaType.Number)
-                    return _extractValues[typeof(double)];
+                    return _extractValues[typeof(LuaNumber)];
             }
             bool netParamIsString = paramType == typeof(string) || paramType == typeof(char[]) || paramType == typeof(byte[]);
 
@@ -147,6 +154,16 @@ namespace NLua
             else if (paramType == typeof(LuaUserData))
             {
                 if (luatype == LuaType.UserData || luatype == LuaType.Nil)
+                    return _extractValues[paramType];
+            }
+            else if (paramType == typeof(LuaFile))
+            {
+                if (luatype == LuaType.UserData || luatype == LuaType.Nil)
+                    return _extractValues[paramType];
+            }
+            else if (paramType == typeof(LuaLightUserData))
+            {
+                if (luatype == LuaType.LightUserData || luatype == LuaType.Nil)
                     return _extractValues[paramType];
             }
             else if (paramType == typeof(LuaFunction))
@@ -185,10 +202,20 @@ namespace NLua
 
 
         /*
-         * The following functions return the value in the Lua stack
-         * index stackPos as the desired type if it can, or null
-         * otherwise.
+         * The following functions return the value in the Lua stack index stackPos as the desired type if it can, or null otherwise.
          */
+
+        private LuaNumber GetAsNumber(LuaState luaState, int stackPos)
+        {
+            if (!luaState.IsNumericType(stackPos))
+                return null;
+
+            if (luaState.IsInteger(stackPos))
+                return luaState.ToInteger(stackPos);
+
+            return luaState.ToNumber(stackPos);
+        }
+
         private object GetAsSbyte(LuaState luaState, int stackPos)
         {
             if (!luaState.IsNumericType(stackPos))
@@ -368,6 +395,16 @@ namespace NLua
         private object GetAsUserdata(LuaState luaState, int stackPos)
         {
             return _translator.GetUserData(luaState, stackPos);
+        }
+
+        private object GetAsFile(LuaState luaState, int stackPos)
+        {
+            return _translator.GetFile(luaState, stackPos);
+        }
+
+        private object GetAsLightUserdata(LuaState luaState, int stackPos)
+        {
+            return _translator.GetLightUserData(luaState, stackPos);
         }
 
         public object GetAsObject(LuaState luaState, int stackPos)

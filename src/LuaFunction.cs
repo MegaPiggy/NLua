@@ -6,6 +6,9 @@ using LuaNativeFunction = KeraLua.LuaFunction;
 
 namespace NLua
 {
+    /// <summary>
+    /// A lua function
+    /// </summary>
     public class LuaFunction : LuaBase
     {
         internal readonly LuaNativeFunction function;
@@ -20,10 +23,10 @@ namespace NLua
             function = nativeFunction;
         }
 
-        /*
-         * Calls the function casting return values to the types
-         * in returnTypes
-         */
+        /// <summary>
+        /// Calls the function casting return values to the types in returnTypes
+        /// </summary>
+        /// <returns>its return values inside an array</returns>
         internal object[] Call(object[] args, Type[] returnTypes)
         {
             Lua lua;
@@ -33,10 +36,10 @@ namespace NLua
             return lua.CallFunction(this, args, returnTypes);
         }
 
-        /*
-         * Calls the function and returns its return values inside
-         * an array
-         */
+        /// <summary>
+        /// Calls the function
+        /// </summary>
+        /// <returns>its return values inside an array</returns>
         public object[] Call(params object[] args)
         {
             Lua lua;
@@ -46,9 +49,9 @@ namespace NLua
             return lua.CallFunction(this, args);
         }
 
-        /*
-         * Pushes the function into the Lua stack
-         */
+        /// <summary>
+        /// Pushes the function into the Lua stack
+        /// </summary>
         internal void Push(LuaState luaState)
         {
             Lua lua;

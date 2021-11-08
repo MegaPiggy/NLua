@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Event\HookExceptionEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\LuaException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\LuaScriptException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\LuaExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TypeExtensions.cs" />
@@ -24,9 +25,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)GenerateEventAssembly\LuaClassType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lua.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LuaBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LuaFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LuaLightUserData.cs" />
+    <None Include="$(MSBuildThisFileDirectory)LuaDate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LuaFunction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LuaGlobalAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LuaHideAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LuaNumber.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LuaRegistrationHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LuaThread.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LuaTable.cs" />

@@ -8,15 +8,18 @@ using LuaState = KeraLua.Lua;
 
 namespace NLua
 {
+    /// <summary>
+    /// A lua table
+    /// </summary>
     public class LuaTable : LuaBase
     {
         public LuaTable(int reference, Lua interpreter): base(reference, interpreter)
         {
         }
 
-        /*
-         * Indexer for string fields of the table
-         */
+        /// <summary>
+        /// Indexer for string fields of the table
+        /// </summary>
         public object this[string field] {
             get
             {
@@ -34,9 +37,9 @@ namespace NLua
             }
         }
 
-        /*
-         * Indexer for numeric fields of the table
-         */
+        /// <summary>
+        /// Indexer for numeric fields of the table
+        /// </summary>
         public object this[object field] {
             get
             {
@@ -91,10 +94,9 @@ namespace NLua
         }
 
 
-        /*
-         * Gets an string fields of a table ignoring its metatable,
-         * if it exists
-         */
+        /// <summary>
+        /// Gets an string fields of a table ignoring its metatable, if it exists
+        /// </summary>
         internal object RawGet(string field)
         {
             Lua lua;
@@ -104,9 +106,10 @@ namespace NLua
             return lua.RawGetObject(_Reference, field);
         }
 
-        /*
-         * Pushes this table into the Lua stack
-         */
+        /// <summary>
+        /// Pushes this table into the Lua stack
+        /// </summary>
+        /// <param name="luaState"></param>
         internal void Push(LuaState luaState)
         {
             luaState.GetRef(_Reference);

@@ -19,10 +19,10 @@ namespace NLuaTest
     [TestFixture]
     public class CodeGenTests
     {
-        /*
-        * Tests passing a Lua function to a delegate
-        * with value-type arguments
-        */
+        /// <summary>
+        /// Tests passing a Lua function to a delegate
+        /// with value-type arguments
+        /// </summary>
         [Test]
         public void LuaDelegateValueTypes()
         {
@@ -39,10 +39,10 @@ namespace NLuaTest
                 //Console.WriteLine("delegate returned: "+a);
             }
         }
-        /*
-        * Tests passing a Lua function to a delegate
-        * with value-type arguments and out params
-        */
+        /// <summary>
+        /// Tests passing a Lua function to a delegate
+        /// with value-type arguments and out params
+        /// </summary>
         [Test]
         public void LuaDelegateValueTypesOutParam()
         {
@@ -59,10 +59,10 @@ namespace NLuaTest
                 //Console.WriteLine("delegate returned: "+a);
             }
         }
-        /*
-        * Tests passing a Lua function to a delegate
-        * with value-type arguments and ref params
-        */
+        /// <summary>
+        /// Tests passing a Lua function to a delegate
+        /// with value-type arguments and ref params
+        /// </summary>
         [Test]
         public void LuaDelegateValueTypesByRefParam()
         {
@@ -79,10 +79,10 @@ namespace NLuaTest
                 //Console.WriteLine("delegate returned: "+a);
             }
         }
-        /*
-        * Tests passing a Lua function to a delegate
-        * with value-type arguments that returns a reference type
-        */
+        /// <summary>
+        /// Tests passing a Lua function to a delegate
+        /// with value-type arguments that returns a reference type
+        /// </summary>
         [Test]
         public void LuaDelegateValueTypesReturnReferenceType()
         {
@@ -99,10 +99,10 @@ namespace NLuaTest
                 //Console.WriteLine("delegate returned: "+a);
             }
         }
-        /*
-        * Tests passing a Lua function to a delegate
-        * with reference type arguments
-        */
+        /// <summary>
+        /// Tests passing a Lua function to a delegate
+        /// with reference type arguments
+        /// </summary>
         [Test]
         public void LuaDelegateReferenceTypes()
         {
@@ -118,10 +118,10 @@ namespace NLuaTest
                 //Console.WriteLine("delegate returned: "+a);
             }
         }
-        /*
-        * Tests passing a Lua function to a delegate
-        * with reference type arguments and an out param
-        */
+        /// <summary>
+        /// Tests passing a Lua function to a delegate
+        /// with reference type arguments and an out param
+        /// </summary>
         [Test]
         public void LuaDelegateReferenceTypesOutParam()
         {
@@ -138,10 +138,10 @@ namespace NLuaTest
                 //Console.WriteLine("delegate returned: "+a);
             }
         }
-        /*
-        * Tests passing a Lua function to a delegate
-        * with reference type arguments and a ref param
-        */
+        /// <summary>
+        /// Tests passing a Lua function to a delegate
+        /// with reference type arguments and a ref param
+        /// </summary>
         [Test]
         public void LuaDelegateReferenceTypesByRefParam()
         {
@@ -159,10 +159,10 @@ namespace NLuaTest
         }
 
 
-        /*
-        * Tests passing a Lua table as an interface and
-        * calling one of its methods with value-type params
-        */
+        /// <summary>
+        /// Tests passing a Lua table as an interface and
+        /// calling one of its methods with value-type params
+        /// </summary>
         [Test]
         public void NLuaAAValueTypes()
         {
@@ -181,10 +181,10 @@ namespace NLuaTest
             }
         }
 
-        /*
-        * Tests making an object from a Lua table and calling the base
-        * class version of one of the methods the table overrides.
-        */
+        /// <summary>
+        /// Tests making an object from a Lua table and calling the base
+        /// class version of one of the methods the table overrides.
+        /// </summary>
         [Test]
         public void LuaTableBaseMethod()
         {

@@ -4,10 +4,9 @@ namespace NLua.Method
 {
     public class LuaClassHelper
     {
-        /*
-         *  Gets the function called name from the provided table,
-         * returning null if it does not exist
-         */
+        /// <summary>
+        /// Gets the function called name from the provided table, returning null if it does not exist
+        /// </summary>
         public static LuaFunction GetTableFunction(LuaTable luaTable, string name)
         {
             if (luaTable == null)
@@ -20,9 +19,9 @@ namespace NLua.Method
             return null;
         }
 
-        /*
-         * Calls the provided function with the provided parameters
-         */
+        /// <summary>
+        /// Calls the provided function with the provided parameters
+        /// </summary>
         public static object CallFunction(LuaFunction function, object[] args, Type[] returnTypes, object[] inArgs, int[] outArgs)
         {
             // args is the return array of arguments, inArgs is the actual array

@@ -9,9 +9,17 @@ namespace NLua
     public abstract class LuaBase : IDisposable
     {
         private bool _disposed;
+        /// <summary>
+        /// Reference to the object
+        /// </summary>
         protected readonly int _Reference;
         Lua _lua;
 
+        /// <summary>
+        /// Gets the lua interpreter if the state is not closed.
+        /// </summary>
+        /// <param name="lua">the got lua interpreter</param>
+        /// <returns>successfulness of the get</returns>
         protected bool TryGet(out Lua lua)
         {
             if (_lua.State == null)
@@ -23,6 +31,7 @@ namespace NLua
             lua = _lua;
             return true;
         }
+
         protected LuaBase(int reference, Lua lua)
         {
             _lua = lua;
@@ -34,6 +43,9 @@ namespace NLua
             Dispose(false);
         }
 
+        /// <summary>
+        /// Disposes the lua reference
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
@@ -50,6 +62,10 @@ namespace NLua
 
             lua.DisposeInternal(_Reference, finalized);
         }
+
+        /// <summary>
+        /// Disposes the lua reference
+        /// </summary>
         public virtual void Dispose(bool disposeManagedResources)
         {
             if (_disposed)
@@ -66,6 +82,11 @@ namespace NLua
             _disposed = true;
         }
 
+        /// <summary>
+        /// Compares the references of 2 <see cref="LuaBase"/> objects.
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
         public override bool Equals(object o)
         {
             var reference = o as LuaBase;
@@ -79,11 +100,17 @@ namespace NLua
             return lua.CompareRef(reference._Reference, _Reference);
         }
 
+        /// <summary>
+        /// Gets the reference to the object
+        /// </summary>
         public override int GetHashCode()
         {
             return _Reference;
         }
 
+        /// <summary>
+        /// Object as a string
+        /// </summary>
         public override string ToString()
         {
             Lua lua;

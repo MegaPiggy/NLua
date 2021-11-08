@@ -29,9 +29,9 @@ namespace NLuaTest
         public static string UnicodeString => Convert.ToString(UnicodeChar);
         public static string UnicodeStringRussian => "Файл";
 
-        /*
-        * Tests capturing an exception
-        */
+        /// <summary>
+        /// Tests capturing an exception
+        /// </summary>
         [Test]
         public void ThrowException()
         {
@@ -51,9 +51,9 @@ namespace NLuaTest
             }
         }
 
-        /*
-        * Tests passing a LuaFunction
-        */
+        /// <summary>
+        /// Tests passing a LuaFunction
+        /// </summary>
         [Test]
         public void CallLuaFunction()
         {
@@ -72,9 +72,9 @@ namespace NLuaTest
             }
         }
 
-        /*
-        * Tests capturing an exception
-        */
+        /// <summary>
+        /// Tests capturing an exception
+        /// </summary>
         [Test]
         public void ThrowUncaughtException()
         {
@@ -100,9 +100,9 @@ namespace NLuaTest
         }
 
 
-        /*
-        * Tests nullable fields
-        */
+        /// <summary>
+        /// Tests nullable fields
+        /// </summary>
         [Test]
         public void TestNullable()
         {
@@ -120,9 +120,9 @@ namespace NLuaTest
             }
         }
 
-        /*
-        * Tests structure assignment
-        */
+        /// <summary>
+        /// Tests structure assignment
+        /// </summary>
         [Test]
         public void TestStructs()
         {
@@ -139,9 +139,9 @@ namespace NLuaTest
             }
         }
 
-        /*
-        * Tests structure creation via the default constructor
-        */
+        /// <summary>
+        /// Tests structure creation via the default constructor
+        /// </summary>
         [Test]
         public void TestStructDefaultConstructor()
         {
@@ -306,9 +306,9 @@ namespace NLuaTest
             }
         }
 
-        /*
-        * Tests functions
-        */
+        /// <summary>
+        /// Tests functions
+        /// </summary>
         [Test]
         public void TestFunctions()
         {
@@ -324,10 +324,10 @@ namespace NLuaTest
         }
 
 
-        /*
-        * Tests making an object from a Lua table and calling one of
-        * methods the table overrides.
-        */
+        /// <summary>
+        /// Tests making an object from a Lua table and calling one of
+        /// methods the table overrides.
+        /// </summary>
         [Test]
         public void LuaTableOverridedMethod()
         {
@@ -346,10 +346,10 @@ namespace NLuaTest
         }
 
 
-        /*
-        * Tests making an object from a Lua table and calling a method
-        * the table does not override.
-        */
+        /// <summary>
+        /// Tests making an object from a Lua table and calling a method
+        /// the table does not override.
+        /// </summary>
         [Test]
         public void LuaTableInheritedMethod()
         {
@@ -477,7 +477,11 @@ namespace NLuaTest
                 }
 
                 Assert.AreEqual(true, classWithGenericMethod.GenericMethodSuccess);
-                Assert.AreEqual(true, classWithGenericMethod.Validate<double>(100)); //note the gotcha: numbers are all being passed to generic methods as doubles
+                bool validation = classWithGenericMethod.Validate<double>(100);
+                Console.WriteLine("Validation " + (validation ? "was successful" : "has failed"));
+                Console.WriteLine(100d.GetType() + " vs " + classWithGenericMethod.PassedValue.GetType());
+                Console.WriteLine(100d + " vs " + classWithGenericMethod.PassedValue);
+                Assert.AreEqual(true, validation); //note the gotcha: numbers are all being passed to generic methods as doubles
 
                 try
                 {
@@ -486,9 +490,11 @@ namespace NLuaTest
                     lua.DoString("test=TestClass(56)");
                     lua.DoString("genericMethod2(test)");
                 }
-                catch
+                catch(Exception exception)
                 {
+                    throw exception;
                 }
+                Console.WriteLine(classWithGenericMethod.PassedValue.GetType());
 
                 Assert.AreEqual(true, classWithGenericMethod.GenericMethodSuccess);
                 Assert.AreEqual(56, (classWithGenericMethod.PassedValue as TestTypes.TestClass).val);
@@ -584,10 +590,10 @@ namespace NLuaTest
             }
         }
 
-        /*
-         * Tests passing a null object as a parameter to a
-         * method that accepts a nullable.
-         */
+        /// <summary>
+         /// Tests passing a null object as a parameter to a
+         /// method that accepts a nullable.
+         /// </summary>
         [Test]
         public void TestNullableParameter()
         {
@@ -608,9 +614,9 @@ namespace NLuaTest
             }
         }
 
-        /*
-        * Tests if DoString is correctly returning values
-        */
+        /// <summary>
+        /// Tests if DoString is correctly returning values
+        /// </summary>
         [Test]
         public void DoString()
         {
@@ -622,9 +628,9 @@ namespace NLuaTest
                 Assert.AreEqual(res[1], 3d);
             }
         }
-        /*
-        * Tests getting of global numeric variables
-        */
+        /// <summary>
+        /// Tests getting of global numeric variables
+        /// </summary>
         [Test]
         public void GetGlobalNumber()
         {
@@ -636,9 +642,9 @@ namespace NLuaTest
                 Assert.AreEqual(num, 2d);
             }
         }
-        /*
-        * Tests setting of global numeric variables
-        */
+        /// <summary>
+        /// Tests setting of global numeric variables
+        /// </summary>
         [Test]
         public void SetGlobalNumber()
         {
@@ -651,10 +657,10 @@ namespace NLuaTest
                 Assert.AreEqual(num, 3d);
             }
         }
-        /*
-        * Tests getting of numeric variables from tables
-        * by specifying variable path
-        */
+        /// <summary>
+        /// Tests getting of numeric variables from tables
+        /// by specifying variable path
+        /// </summary>
         [Test]
         public void GetNumberInTable()
         {
@@ -666,10 +672,10 @@ namespace NLuaTest
                 Assert.AreEqual(num, 2d);
             }
         }
-        /*
-        * Tests setting of numeric variables from tables
-        * by specifying variable path
-        */
+        /// <summary>
+        /// Tests setting of numeric variables from tables
+        /// by specifying variable path
+        /// </summary>
         [Test]
         public void SetNumberInTable()
         {
@@ -682,9 +688,9 @@ namespace NLuaTest
                 Assert.AreEqual(num, 3d);
             }
         }
-        /*
-        * Tests getting of global string variables
-        */
+        /// <summary>
+        /// Tests getting of global string variables
+        /// </summary>
         [Test]
         public void GetGlobalString()
         {
@@ -696,9 +702,9 @@ namespace NLuaTest
                 Assert.AreEqual(str, "test");
             }
         }
-        /*
-        * Tests setting of global string variables
-        */
+        /// <summary>
+        /// Tests setting of global string variables
+        /// </summary>
         [Test]
         public void SetGlobalString()
         {
@@ -711,10 +717,10 @@ namespace NLuaTest
                 Assert.AreEqual(str, "new test");
             }
         }
-        /*
-        * Tests getting of string variables from tables
-        * by specifying variable path
-        */
+        /// <summary>
+        /// Tests getting of string variables from tables
+        /// by specifying variable path
+        /// </summary>
         [Test]
         public void GetStringInTable()
         {
@@ -725,10 +731,10 @@ namespace NLuaTest
                 Assert.AreEqual(str, "test");
             }
         }
-        /*
-        * Tests setting of string variables from tables
-        * by specifying variable path
-        */
+        /// <summary>
+        /// Tests setting of string variables from tables
+        /// by specifying variable path
+        /// </summary>
         [Test]
         public void SetStringInTable()
         {
@@ -740,9 +746,9 @@ namespace NLuaTest
                 Assert.AreEqual(str, "new test");
             }
         }
-        /*
-        * Tests getting and setting of global table variables
-        */
+        /// <summary>
+        /// Tests getting and setting of global table variables
+        /// </summary>
         [Test]
         public void GetAndSetTable()
         {
@@ -755,9 +761,9 @@ namespace NLuaTest
                 Assert.AreEqual(num, 3d);
             }
         }
-        /*
-        * Tests getting of numeric field of a table
-        */
+        /// <summary>
+        /// Tests getting of numeric field of a table
+        /// </summary>
         [Test]
         public void GetTableNumericField1()
         {
@@ -769,10 +775,10 @@ namespace NLuaTest
                 Assert.AreEqual(2L, num);
             }
         }
-        /*
-        * Tests getting of numeric field of a table
-        * (the field is inside a subtable)
-        */
+        /// <summary>
+        /// Tests getting of numeric field of a table
+        /// (the field is inside a subtable)
+        /// </summary>
         [Test]
         public void GetTableNumericField2()
         {
@@ -784,9 +790,9 @@ namespace NLuaTest
                 Assert.AreEqual(2L, num);
             }
         }
-        /*
-        * Tests setting of numeric field of a table
-        */
+        /// <summary>
+        /// Tests setting of numeric field of a table
+        /// </summary>
         [Test]
         public void SetTableNumericField1()
         {
@@ -799,10 +805,10 @@ namespace NLuaTest
                 Assert.AreEqual(num, 3d);
             }
         }
-        /*
-        * Tests setting of numeric field of a table
-        * (the field is inside a subtable)
-        */
+        /// <summary>
+        /// Tests setting of numeric field of a table
+        /// (the field is inside a subtable)
+        /// </summary>
         [Test]
         public void SetTableNumericField2()
         {
@@ -815,9 +821,9 @@ namespace NLuaTest
                 Assert.AreEqual(num, 3d);
             }
         }
-        /*
-        * Tests getting of string field of a table
-        */
+        /// <summary>
+        /// Tests getting of string field of a table
+        /// </summary>
         [Test]
         public void GetTableStringField1()
         {
@@ -829,10 +835,10 @@ namespace NLuaTest
                 Assert.AreEqual(str, "test");
             }
         }
-        /*
-        * Tests getting of string field of a table
-        * (the field is inside a subtable)
-        */
+        /// <summary>
+        /// Tests getting of string field of a table
+        /// (the field is inside a subtable)
+        /// </summary>
         [Test]
         public void GetTableStringField2()
         {
@@ -844,9 +850,9 @@ namespace NLuaTest
                 Assert.AreEqual(str, "test");
             }
         }
-        /*
-        * Tests setting of string field of a table
-        */
+        /// <summary>
+        /// Tests setting of string field of a table
+        /// </summary>
         [Test]
         public void SetTableStringField1()
         {
@@ -859,10 +865,10 @@ namespace NLuaTest
                 Assert.AreEqual(str, "new test");
             }
         }
-        /*
-        * Tests setting of string field of a table
-        * (the field is inside a subtable)
-        */
+        /// <summary>
+        /// Tests setting of string field of a table
+        /// (the field is inside a subtable)
+        /// </summary>
         [Test]
         public void SetTableStringField2()
         {
@@ -875,9 +881,9 @@ namespace NLuaTest
                 Assert.AreEqual(str, "new test");
             }
         }
-        /*
-        * Tests calling of a global function with zero arguments
-        */
+        /// <summary>
+        /// Tests calling of a global function with zero arguments
+        /// </summary>
         [Test]
         public void CallGlobalFunctionNoArgs()
         {
@@ -889,9 +895,9 @@ namespace NLuaTest
                 Assert.AreEqual(num, 3);
             }
         }
-        /*
-        * Tests calling of a global function with one argument
-        */
+        /// <summary>
+        /// Tests calling of a global function with one argument
+        /// </summary>
         [Test]
         public void CallGlobalFunctionOneArg()
         {
@@ -903,9 +909,9 @@ namespace NLuaTest
                 Assert.AreEqual(num, 3d);
             }
         }
-        /*
-        * Tests calling of a global function with two arguments
-        */
+        /// <summary>
+        /// Tests calling of a global function with two arguments
+        /// </summary>
         [Test]
         public void CallGlobalFunctionTwoArgs()
         {
@@ -917,9 +923,9 @@ namespace NLuaTest
                 Assert.AreEqual(num, 4d);
             }
         }
-        /*
-        * Tests calling of a global function that returns one value
-        */
+        /// <summary>
+        /// Tests calling of a global function that returns one value
+        /// </summary>
         [Test]
         public void CallGlobalFunctionOneReturn()
         {
@@ -932,9 +938,9 @@ namespace NLuaTest
                 Assert.AreEqual(5, ret[0]);
             }
         }
-        /*
-        * Tests calling of a global function that returns two values
-        */
+        /// <summary>
+        /// Tests calling of a global function that returns two values
+        /// </summary>
         [Test]
         public void CallGlobalFunctionTwoReturns()
         {
@@ -948,9 +954,9 @@ namespace NLuaTest
                 Assert.AreEqual(5.5, (double)ret[1]);
             }
         }
-        /*
-        * Tests calling of a function inside a table
-        */
+        /// <summary>
+        /// Tests calling of a function inside a table
+        /// </summary>
         [Test]
         public void CallTableFunctionTwoReturns()
         {
@@ -964,9 +970,9 @@ namespace NLuaTest
                 Assert.AreEqual(5, ret[1]);
             }
         }
-        /*
-        * Tests setting of a global variable to a CLR object value
-        */
+        /// <summary>
+        /// Tests setting of a global variable to a CLR object value
+        /// </summary>
         [Test]
         public void SetGlobalObject()
         {
@@ -982,9 +988,9 @@ namespace NLuaTest
                 Assert.AreEqual(t1, t2);
             }
         }
-        ///*
-        // * Tests if CLR object is being correctly collected by Lua
-        // */
+        /// <summary>
+        /// Tests if CLR object is being correctly collected by Lua
+        /// </summary>
         [Test]
         public void GarbageCollection()
         {
@@ -999,9 +1005,9 @@ namespace NLuaTest
                 Assert.IsNull(t2);
             }
         }
-        /*
-        * Tests setting of a table field to a CLR object value
-        */
+        /// <summary>
+        /// Tests setting of a table field to a CLR object value
+        /// </summary>
         [Test]
         public void SetTableObjectField1()
         {
@@ -1018,9 +1024,9 @@ namespace NLuaTest
                 Assert.AreEqual(t1, t2);
             }
         }
-        /*
-        * Tests reading and writing of an object's field
-        */
+        /// <summary>
+        /// Tests reading and writing of an object's field
+        /// </summary>
         [Test]
         public void AccessObjectField()
         {
@@ -1037,10 +1043,10 @@ namespace NLuaTest
                 Assert.AreEqual(3, t1.val);
             }
         }
-        /*
-        * Tests reading and writing of an object's non-indexed
-        * property
-        */
+        /// <summary>
+        /// Tests reading and writing of an object's non-indexed
+        /// property
+        /// </summary>
         [Test]
         public void AccessObjectProperty()
         {
@@ -1074,9 +1080,9 @@ namespace NLuaTest
                 Assert.AreEqual("Another String", t1.teststrval);
             }
         }
-        /*
-        * Tests calling of an object's method with no overloads
-        */
+        /// <summary>
+        /// Tests calling of an object's method with no overloads
+        /// </summary>
         [Test]
         public void CallObjectMethod()
         {
@@ -1093,9 +1099,9 @@ namespace NLuaTest
                 Assert.AreEqual(3, val);
             }
         }
-        /*
-        * Tests calling of an object's method with overloading
-        */
+        /// <summary>
+        /// Tests calling of an object's method with overloading
+        /// </summary>
         [Test]
         public void CallObjectMethodByType()
         {
@@ -1107,11 +1113,11 @@ namespace NLuaTest
                 Assert.AreEqual("str", t1.getStrVal());
             }
         }
-        /*
-        * Tests calling of an object's method with a nil string param value, 
-        * then a non-null string value. This test ensures that after a method 
-        * is cached, a string parameter can be retrieved appropriately.
-        */
+        /// <summary>
+        /// Tests calling of an object's method with a nil string param value, 
+        /// then a non-null string value. This test ensures that after a method 
+        /// is cached, a string parameter can be retrieved appropriately.
+        /// </summary>
         [Test]
         public void CallObjectMethodNilStringParam()
         {
@@ -1127,10 +1133,10 @@ namespace NLuaTest
                 Assert.AreEqual(inputParam, val);
             }
         }
-        /*
-        * Tests calling of an object's method with no overloading
-        * and out parameters
-        */
+        /// <summary>
+        /// Tests calling of an object's method with no overloading
+        /// and out parameters
+        /// </summary>
         [Test]
         public void CallObjectMethodOutParam()
         {
@@ -1146,10 +1152,10 @@ namespace NLuaTest
                 Assert.AreEqual(5, b);
             }
         }
-        /*
-        * Tests calling of an object's method with overloading and
-        * out params
-        */
+        /// <summary>
+        /// Tests calling of an object's method with overloading and
+        /// out params
+        /// </summary>
         [Test]
         public void CallObjectMethodOverloadedOutParam()
         {
@@ -1164,9 +1170,9 @@ namespace NLuaTest
                 Assert.AreEqual(5, b);
             }
         }
-        /*
-        * Tests calling of an object's method with ref params
-        */
+        /// <summary>
+        /// Tests calling of an object's method with ref params
+        /// </summary>
         [Test]
         public void CallObjectMethodByRefParam()
         {
@@ -1182,10 +1188,10 @@ namespace NLuaTest
                 Assert.AreEqual(5, b);
             }
         }
-        /*
-        * Tests calling of two versions of an object's method that have
-        * the same name and signature but implement different interfaces
-        */
+        /// <summary>
+        /// Tests calling of two versions of an object's method that have
+        /// the same name and signature but implement different interfaces
+        /// </summary>
         [Test]
         public void CallObjectMethodDistinctInterfaces()
         {
@@ -1205,9 +1211,9 @@ namespace NLuaTest
                 Assert.AreEqual(3, foo1.foo(), "#2.1");
             }
         }
-        /*
-        * Tests instantiating an object with no-argument constructor
-        */
+        /// <summary>
+        /// Tests instantiating an object with no-argument constructor
+        /// </summary>
         [Test]
         public void CreateNetObjectNoArgsCons()
         {
@@ -1223,9 +1229,9 @@ namespace NLuaTest
                 Assert.AreEqual(3, test.testval);
             }
         }
-        /*
-        * Tests instantiating an object with one-argument constructor
-        */
+        /// <summary>
+        /// Tests instantiating an object with one-argument constructor
+        /// </summary>
         [Test]
         public void CreateNetObjectOneArgCons()
         {
@@ -1240,9 +1246,9 @@ namespace NLuaTest
                 Assert.AreEqual(3, test.testval);
             }
         }
-        /*
-        * Tests instantiating an object with one-argument constructor
-        */
+        /// <summary>
+        /// Tests instantiating an object with one-argument constructor
+        /// </summary>
         [Test]
         public void CreateNetObjectWrongArgCons()
         {
@@ -1261,9 +1267,9 @@ namespace NLuaTest
                 }
             }
         }
-        /*
-        * Tests instantiating an object with overloaded constructor
-        */
+        /// <summary>
+        /// Tests instantiating an object with overloaded constructor
+        /// </summary>
         [Test]
         public void CreateNetObjectOverloadedCons()
         {
@@ -1278,9 +1284,9 @@ namespace NLuaTest
                 Assert.AreEqual("str", test.getStrVal());
             }
         }
-        /*
-        * Tests getting item of a CLR array
-        */
+        /// <summary>
+        /// Tests getting item of a CLR array
+        /// </summary>
         [Test]
         public void ReadArrayField()
         {
@@ -1294,9 +1300,9 @@ namespace NLuaTest
                 Assert.AreEqual("str2", val);
             }
         }
-        /*G
-        * Tests setting item of a CLR array
-        */
+        /// <summary>G
+        /// Tests setting item of a CLR array
+        /// </summary>
         [Test]
         public void WriteArrayField()
         {
@@ -1308,9 +1314,9 @@ namespace NLuaTest
                 Assert.AreEqual("test", arr[1]);
             }
         }
-        /*
-        * Tests creating a new CLR array
-        */
+        /// <summary>
+        /// Tests creating a new CLR array
+        /// </summary>
         [Test]
         public void CreateArray()
         {
@@ -1324,10 +1330,10 @@ namespace NLuaTest
                 Assert.AreEqual(arr[1].testval, 2);
             }
         }
-        /*
-        * Tests passing a Lua function to a delegate
-        * with value-type arguments
-        */
+        /// <summary>
+        /// Tests passing a Lua function to a delegate
+        /// with value-type arguments
+        /// </summary>
         [Test]
         public void LuaDelegateValueTypes()
         {
@@ -1345,10 +1351,10 @@ namespace NLuaTest
                 Assert.AreEqual(5, a);
             }
         }
-        /*
-        * Tests passing a Lua function to a delegate
-        * with value-type arguments and out params
-        */
+        /// <summary>
+        /// Tests passing a Lua function to a delegate
+        /// with value-type arguments and out params
+        /// </summary>
         [Test]
         public void LuaDelegateValueTypesOutParam()
         {
@@ -1366,10 +1372,10 @@ namespace NLuaTest
                 Assert.AreEqual(6, a);
             }
         }
-        /*
-        * Tests passing a Lua function to a delegate
-        * with value-type arguments and ref params
-        */
+        /// <summary>
+        /// Tests passing a Lua function to a delegate
+        /// with value-type arguments and ref params
+        /// </summary>
         [Test]
         public void LuaDelegateValueTypesByRefParam()
         {
@@ -1387,10 +1393,10 @@ namespace NLuaTest
                 Assert.AreEqual(5, a);
             }
         }
-        /*
-        * Tests passing a Lua function to a delegate
-        * with value-type arguments that returns a reference type
-        */
+        /// <summary>
+        /// Tests passing a Lua function to a delegate
+        /// with value-type arguments that returns a reference type
+        /// </summary>
         [Test]
         public void LuaDelegateValueTypesReturnReferenceType()
         {
@@ -1408,10 +1414,10 @@ namespace NLuaTest
                 Assert.AreEqual(5, a);
             }
         }
-        /*
-        * Tests passing a Lua function to a delegate
-        * with reference type arguments
-        */
+        /// <summary>
+        /// Tests passing a Lua function to a delegate
+        /// with reference type arguments
+        /// </summary>
         [Test]
         public void LuaDelegateReferenceTypes()
         {
@@ -1428,10 +1434,10 @@ namespace NLuaTest
                 Assert.AreEqual(5, a);
             }
         }
-        /*
-        * Tests passing a Lua function to a delegate
-        * with reference type arguments and an out param
-        */
+        /// <summary>
+        /// Tests passing a Lua function to a delegate
+        /// with reference type arguments and an out param
+        /// </summary>
         [Test]
         public void LuaDelegateReferenceTypesOutParam()
         {
@@ -1449,10 +1455,10 @@ namespace NLuaTest
                 Assert.AreEqual(6, a);
             }
         }
-        /*
-        * Tests passing a Lua function to a delegate
-        * with reference type arguments and a ref param
-        */
+        /// <summary>
+        /// Tests passing a Lua function to a delegate
+        /// with reference type arguments and a ref param
+        /// </summary>
         [Test]
         public void LuaDelegateReferenceTypesByRefParam()
         {
@@ -1471,10 +1477,10 @@ namespace NLuaTest
         }
 
 
-        /*
-        * Tests passing a Lua table as an interface and
-        * calling one of its methods with value-type params
-        */
+        /// <summary>
+        /// Tests passing a Lua table as an interface and
+        /// calling one of its methods with value-type params
+        /// </summary>
         [Test]
         public void NLuaAAValueTypes()
         {
@@ -1493,11 +1499,11 @@ namespace NLuaTest
                 Assert.AreEqual(5, a);
             }
         }
-        /*
-        * Tests passing a Lua table as an interface and
-        * calling one of its methods with value-type params
-        * and an out param
-        */
+        /// <summary>
+        /// Tests passing a Lua table as an interface and
+        /// calling one of its methods with value-type params
+        /// and an out param
+        /// </summary>
         [Test]
         public void NLuaValueTypesOutParam()
         {
@@ -1515,11 +1521,11 @@ namespace NLuaTest
                 Assert.AreEqual(6, a);
             }
         }
-        /*
-        * Tests passing a Lua table as an interface and
-        * calling one of its methods with value-type params
-        * and a ref param
-        */
+        /// <summary>
+        /// Tests passing a Lua table as an interface and
+        /// calling one of its methods with value-type params
+        /// and a ref param
+        /// </summary>
         [Test]
         public void NLuaValueTypesByRefParam()
         {
@@ -1537,11 +1543,11 @@ namespace NLuaTest
                 Assert.AreEqual(5, a);
             }
         }
-        /*
-        * Tests passing a Lua table as an interface and
-        * calling one of its methods with value-type params
-        * returning a reference type param
-        */
+        /// <summary>
+        /// Tests passing a Lua table as an interface and
+        /// calling one of its methods with value-type params
+        /// returning a reference type param
+        /// </summary>
         [Test]
         public void NLuaValueTypesReturnReferenceType()
         {
@@ -1559,10 +1565,10 @@ namespace NLuaTest
                 Assert.AreEqual(5, a);
             }
         }
-        /*
-        * Tests passing a Lua table as an interface and
-        * calling one of its methods with reference type params
-        */
+        /// <summary>
+        /// Tests passing a Lua table as an interface and
+        /// calling one of its methods with reference type params
+        /// </summary>
         [Test]
         public void NLuaReferenceTypes()
         {
@@ -1580,11 +1586,11 @@ namespace NLuaTest
                 Assert.AreEqual(5, a);
             }
         }
-        /*
-        * Tests passing a Lua table as an interface and
-        * calling one of its methods with reference type params
-        * and an out param
-        */
+        /// <summary>
+        /// Tests passing a Lua table as an interface and
+        /// calling one of its methods with reference type params
+        /// and an out param
+        /// </summary>
         [Test]
         public void NLuaReferenceTypesOutParam()
         {
@@ -1602,11 +1608,11 @@ namespace NLuaTest
                 Assert.AreEqual(6, a);
             }
         }
-        /*
-        * Tests passing a Lua table as an interface and
-        * calling one of its methods with reference type params
-        * and a ref param
-        */
+        /// <summary>
+        /// Tests passing a Lua table as an interface and
+        /// calling one of its methods with reference type params
+        /// and a ref param
+        /// </summary>
         [Test]
         public void NLuaReferenceTypesByRefParam()
         {
@@ -1625,10 +1631,10 @@ namespace NLuaTest
         }
 
 
-       /*
-        * Tests passing a Lua table as an interface and
-        * accessing one of its value-type properties
-        */
+       /// <summary>
+        /// Tests passing a Lua table as an interface and
+        /// accessing one of its value-type properties
+        /// </summary>
         [Test]
         public void NLuaValueProperty()
         {
@@ -1646,10 +1652,10 @@ namespace NLuaTest
                 Assert.AreEqual(3, a);
             }
         }
-        /*
-        * Tests passing a Lua table as an interface and
-        * accessing one of its reference type properties
-        */
+        /// <summary>
+        /// Tests passing a Lua table as an interface and
+        /// accessing one of its reference type properties
+        /// </summary>
         [Test]
         public void NLuaReferenceProperty()
         {
@@ -1669,10 +1675,10 @@ namespace NLuaTest
         }
 
 
-        /*
-        * Tests making an object from a Lua table and calling the base
-        * class version of one of the methods the table overrides.
-        */
+        /// <summary>
+        /// Tests making an object from a Lua table and calling the base
+        /// class version of one of the methods the table overrides.
+        /// </summary>
         [Test]
         public void LuaTableBaseMethod()
         {
@@ -1701,10 +1707,10 @@ namespace NLuaTest
                 //Console.WriteLine("interface returned: "+a);
             }
         }
-        /*
-        * Tests getting an object's method by its signature
-        * (from object)
-        */
+        /// <summary>
+        /// Tests getting an object's method by its signature
+        /// (from object)
+        /// </summary>
         [Test]
         public void GetMethodBySignatureFromObj()
         {
@@ -1721,10 +1727,10 @@ namespace NLuaTest
                 Assert.AreEqual("test", test.getStrVal());
             }
         }
-        /*
-        * Tests getting an object's method by its signature
-        * (from type)
-        */
+        /// <summary>
+        /// Tests getting an object's method by its signature
+        /// (from type)
+        /// </summary>
         [Test]
         public void GetMethodBySignatureFromType()
         {
@@ -1741,9 +1747,9 @@ namespace NLuaTest
                 Assert.AreEqual("test", test.getStrVal());
             }
         }
-        /*
-        * Tests getting a type's method by its signature
-        */
+        /// <summary>
+        /// Tests getting a type's method by its signature
+        /// </summary>
         [Test]
         public void GetStaticMethodBySignature()
         {
@@ -1759,9 +1765,9 @@ namespace NLuaTest
                 Assert.AreEqual("test", test.getStrVal());
             }
         }
-        /*
-        * Tests getting an object's constructor by its signature
-        */
+        /// <summary>
+        /// Tests getting an object's constructor by its signature
+        /// </summary>
         [Test]
         public void GetConstructorBySignature()
         {
@@ -2676,9 +2682,9 @@ namespace NLuaTest
             }
         }
 
-        ///*
-        // * Tests if Lua objects are being released on finalizer
-        // */
+        /// <summary>
+        /// Tests if Lua objects are being released on finalizer
+        /// </summary>
         [Test]
         public void TestTableFinalizerDispose()
         {
@@ -3008,9 +3014,9 @@ namespace NLuaTest
             }
         }
 
-        /*
-        * Tests capturing multiple exceptions in LuaFunction call
-        */
+        /// <summary>
+        /// Tests capturing multiple exceptions in <see cref="LuaFunction"/> call
+        /// </summary>
         [Test]
         public void ThrowMultipleExceptionsInScript()
         {

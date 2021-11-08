@@ -38,18 +38,27 @@ namespace NLua
         public static readonly LuaNativeFunction SubtractFunction = SubtractLua;
         public static readonly LuaNativeFunction MultiplyFunction = MultiplyLua;
         public static readonly LuaNativeFunction DivisionFunction = DivideLua;
+        public static readonly LuaNativeFunction FloorDivisionFunction = FloorDivideLua;
         public static readonly LuaNativeFunction ModulosFunction = ModLua;
+        public static readonly LuaNativeFunction PowerFunction = PowLua;
         public static readonly LuaNativeFunction UnaryNegationFunction = UnaryNegationLua;
         public static readonly LuaNativeFunction EqualFunction = EqualLua;
         public static readonly LuaNativeFunction LessThanFunction  = LessThanLua;
         public static readonly LuaNativeFunction LessThanOrEqualFunction = LessThanOrEqualLua;
 
+        public static readonly LuaNativeFunction BitwiseAndFunction = BandLua;
+        public static readonly LuaNativeFunction BitwiseOrFunction = BorLua;
+        public static readonly LuaNativeFunction BitwiseXorFunction = BxorLua;
+        public static readonly LuaNativeFunction BitwiseNotFunction = BnotLua;
+        public static readonly LuaNativeFunction ShiftLeftFunction = ShlLua;
+        public static readonly LuaNativeFunction ShiftRightFunction = ShrLua;
+
         readonly Dictionary<object, Dictionary<object, object>> _memberCache = new Dictionary<object, Dictionary<object, object>>();
         readonly ObjectTranslator _translator;
 
-        /*
-         * __index metafunction for CLR objects. Implemented in Lua.
-         */
+        /// <summary>
+        /// __index metafunction for CLR objects. Implemented in Lua.
+        /// </summary>
         public const string LuaIndexFunction = @"local a={}local function b(c,d)local e=getmetatable(c)local f=e.cache[d]if f~=nil then if f==a then return nil end;return f else local g,h=get_object_member(c,d)if h then if g==nil then e.cache[d]=a else e.cache[d]=g end end;return g end end;return b";
             //@"local fakenil = {}
             //  local function index(obj, name)
@@ -82,9 +91,9 @@ namespace NLua
             _translator = translator;
         }
 
-        /*
-         * __call metafunction of CLR delegates, retrieves and calls the delegate.
-         */
+        /// <summary>
+        /// __call metafunction of CLR delegates, retrieves and calls the delegate.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -105,9 +114,9 @@ namespace NLua
             return result;
          }
 
-        /*
-         * __gc metafunction of CLR objects.
-         */
+        /// <summary>
+        /// __gc metafunction of CLR objects.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -128,9 +137,9 @@ namespace NLua
             return 0;
         }
 
-        /*
-         * __tostring metafunction of CLR objects.
-         */
+        /// <summary>
+        /// __tostring metafunction of CLR objects.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -154,9 +163,9 @@ namespace NLua
         }
 
 
-        /*
-         * __add metafunction of CLR objects.
-         */
+        /// <summary>
+        /// __add metafunction of CLR objects.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -172,9 +181,9 @@ namespace NLua
             return result;
         }
 
-        /*
-        * __sub metafunction of CLR objects.
-        */
+        /// <summary>
+        /// __sub metafunction of CLR objects.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -190,9 +199,9 @@ namespace NLua
             return result;
         }
 
-        /*
-        * __mul metafunction of CLR objects.
-        */
+        /// <summary>
+        /// __mul metafunction of CLR objects.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -208,9 +217,9 @@ namespace NLua
             return result;
         }
 
-        /*
-        * __div metafunction of CLR objects.
-        */
+        /// <summary>
+        /// __div metafunction of CLR objects.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -226,9 +235,27 @@ namespace NLua
             return result;
         }
 
-        /*
-        * __mod metafunction of CLR objects.
-        */
+        /// <summary>
+        /// __idiv metafunction of CLR objects.
+        /// </summary>
+#if __IOS__ || __TVOS__ || __WATCHOS__
+        [MonoPInvokeCallback(typeof(LuaNativeFunction))]
+#endif
+        static int FloorDivideLua(IntPtr luaState)
+        {
+            var state = LuaState.FromIntPtr(luaState);
+            var translator = ObjectTranslatorPool.Instance.Find(state);
+            int result = MatchOperator(state, "op_FloorDivision", translator);
+            var exception = translator.GetObject(state, -1) as LuaScriptException;
+
+            if (exception != null)
+                return state.Error();
+            return result;
+        }
+        
+        /// <summary>
+        /// __mod metafunction of CLR objects.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -244,9 +271,27 @@ namespace NLua
             return result;
         }
 
-        /*
-        * __unm metafunction of CLR objects.
-        */
+        /// <summary>
+        /// __pow metafunction of CLR objects.
+        /// </summary>
+#if __IOS__ || __TVOS__ || __WATCHOS__
+        [MonoPInvokeCallback(typeof(LuaNativeFunction))]
+#endif
+        static int PowLua(IntPtr luaState)
+        {
+            var state = LuaState.FromIntPtr(luaState);
+            var translator = ObjectTranslatorPool.Instance.Find(state);
+            int result = MatchOperator(state, "op_Power", translator);
+            var exception = translator.GetObject(state, -1) as LuaScriptException;
+
+            if (exception != null)
+                return state.Error();
+            return result;
+        }
+
+        /// <summary>
+        /// __unm metafunction of CLR objects.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -286,9 +331,9 @@ namespace NLua
         }
 
 
-        /*
-        * __eq metafunction of CLR objects.
-        */
+        /// <summary>
+        /// __eq metafunction of CLR objects.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -304,9 +349,9 @@ namespace NLua
             return result;
         }
 
-        /*
-        * __lt metafunction of CLR objects.
-        */
+        /// <summary>
+        /// __lt metafunction of CLR objects.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -322,9 +367,9 @@ namespace NLua
             return result;
         }
 
-        /*
-         * __le metafunction of CLR objects.
-         */
+        /// <summary>
+        /// __le metafunction of CLR objects.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -333,6 +378,114 @@ namespace NLua
             var state = LuaState.FromIntPtr(luaState);
             var translator = ObjectTranslatorPool.Instance.Find(state);
             int result = MatchOperator(state, "op_LessThanOrEqual", translator);
+            var exception = translator.GetObject(state, -1) as LuaScriptException;
+
+            if (exception != null)
+                return state.Error();
+            return result;
+        }
+
+        /// <summary>
+        /// __band metafunction of CLR objects.
+        /// </summary>
+#if __IOS__ || __TVOS__ || __WATCHOS__
+        [MonoPInvokeCallback(typeof(LuaNativeFunction))]
+#endif
+        static int BandLua(IntPtr luaState)
+        {
+            var state = LuaState.FromIntPtr(luaState);
+            var translator = ObjectTranslatorPool.Instance.Find(state);
+            int result = MatchOperator(state, "op_BitwiseAnd", translator);
+            var exception = translator.GetObject(state, -1) as LuaScriptException;
+
+            if (exception != null)
+                return state.Error();
+            return result;
+        }
+
+        /// <summary>
+        /// __bor metafunction of CLR objects.
+        /// </summary>
+#if __IOS__ || __TVOS__ || __WATCHOS__
+        [MonoPInvokeCallback(typeof(LuaNativeFunction))]
+#endif
+        static int BorLua(IntPtr luaState)
+        {
+            var state = LuaState.FromIntPtr(luaState);
+            var translator = ObjectTranslatorPool.Instance.Find(state);
+            int result = MatchOperator(state, "op_BitwiseOr", translator);
+            var exception = translator.GetObject(state, -1) as LuaScriptException;
+
+            if (exception != null)
+                return state.Error();
+            return result;
+        }
+
+        /// <summary>
+        /// __bxor metafunction of CLR objects.
+        /// </summary>
+#if __IOS__ || __TVOS__ || __WATCHOS__
+        [MonoPInvokeCallback(typeof(LuaNativeFunction))]
+#endif
+        static int BxorLua(IntPtr luaState)
+        {
+            var state = LuaState.FromIntPtr(luaState);
+            var translator = ObjectTranslatorPool.Instance.Find(state);
+            int result = MatchOperator(state, "op_ExclusiveOr", translator);
+            var exception = translator.GetObject(state, -1) as LuaScriptException;
+
+            if (exception != null)
+                return state.Error();
+            return result;
+        }
+
+        /// <summary>
+        /// __bnot metafunction of CLR objects.
+        /// </summary>
+#if __IOS__ || __TVOS__ || __WATCHOS__
+        [MonoPInvokeCallback(typeof(LuaNativeFunction))]
+#endif
+        static int BnotLua(IntPtr luaState)
+        {
+            var state = LuaState.FromIntPtr(luaState);
+            var translator = ObjectTranslatorPool.Instance.Find(state);
+            int result = MatchOperator(state, "op_OnesComplement", translator);
+            var exception = translator.GetObject(state, -1) as LuaScriptException;
+
+            if (exception != null)
+                return state.Error();
+            return result;
+        }
+
+        /// <summary>
+        /// __shl metafunction of CLR objects.
+        /// </summary>
+#if __IOS__ || __TVOS__ || __WATCHOS__
+        [MonoPInvokeCallback(typeof(LuaNativeFunction))]
+#endif
+        static int ShlLua(IntPtr luaState)
+        {
+            var state = LuaState.FromIntPtr(luaState);
+            var translator = ObjectTranslatorPool.Instance.Find(state);
+            int result = MatchOperator(state, "op_LeftShift", translator);
+            var exception = translator.GetObject(state, -1) as LuaScriptException;
+
+            if (exception != null)
+                return state.Error();
+            return result;
+        }
+
+        /// <summary>
+        /// __shr metafunction of CLR objects.
+        /// </summary>
+#if __IOS__ || __TVOS__ || __WATCHOS__
+        [MonoPInvokeCallback(typeof(LuaNativeFunction))]
+#endif
+        static int ShrLua(IntPtr luaState)
+        {
+            var state = LuaState.FromIntPtr(luaState);
+            var translator = ObjectTranslatorPool.Instance.Find(state);
+            int result = MatchOperator(state, "op_RightShift", translator);
             var exception = translator.GetObject(state, -1) as LuaScriptException;
 
             if (exception != null)
@@ -368,13 +521,13 @@ namespace NLua
             }
         }
 
-        /*
-         * Called by the __index metafunction of CLR objects in case the
-         * method is not cached or it is a field/property/event.
-         * Receives the object and the member name as arguments and returns
-         * either the value of the member or a delegate to call it.
-         * If the member does not exist returns nil.
-         */
+        /// <summary>
+        /// Called by the __index metafunction of CLR objects in case the
+        /// method is not cached or it is a field/property/event.
+        /// Receives the object and the member name as arguments and returns
+        /// either the value of the member or a delegate to call it.
+        /// If the member does not exist returns nil.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -675,10 +828,10 @@ namespace NLua
             return 0;
         }
 
-        /*
-         * __index metafunction of base classes (the base field of Lua tables).
-         * Adds a prefix to the method name to call the base version of the method.
-         */
+        /// <summary>
+        /// __index metafunction of base classes (the base field of Lua tables).
+        /// Adds a prefix to the method name to call the base version of the method.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -782,12 +935,12 @@ namespace NLua
             return 2;
         }
 
-        /*
-         * Pushes the value of a member or a delegate to call it, depending on the type of
-         * the member. Works with static or instance members.
-         * Uses reflection to find members, and stores the reflected MemberInfo object in
-         * a cache (indexed by the type of the object and the name of the member).
-         */
+        /// <summary>
+        /// Pushes the value of a member or a delegate to call it, depending on the type of
+        /// the member. Works with static or instance members.
+        /// Uses reflection to find members, and stores the reflected MemberInfo object in
+        /// a cache (indexed by the type of the object and the name of the member).
+        /// </summary>
         int GetMember(LuaState luaState, ProxyType objType, object obj, string methodName, BindingFlags bindingType)
         {
             bool implicitStatic = false;
@@ -928,9 +1081,9 @@ namespace NLua
             return 2;
         }
 
-        /*
-         * Checks if a MemberInfo object is cached, returning it or null.
-         */
+        /// <summary>
+        /// Checks if a MemberInfo object is cached, returning it or null.
+        /// </summary>
         object CheckMemberCache(Type objType, string memberName)
         {
             return CheckMemberCache(new ProxyType(objType), memberName);
@@ -951,9 +1104,9 @@ namespace NLua
             return memberValue;
         }
 
-        /*
-         * Stores a MemberInfo object in the member cache.
-         */
+        /// <summary>
+        /// Stores a MemberInfo object in the member cache.
+        /// </summary>
         void SetMemberCache(Type objType, string memberName, object member)
         {
             SetMemberCache(new ProxyType(objType), memberName, member);
@@ -977,11 +1130,11 @@ namespace NLua
             members[memberName] = member;
         }
 
-        /*
-         * __newindex metafunction of CLR objects. Receives the object,
-         * the member name and the value to be stored as arguments. Throws
-         * and error if the assignment is invalid.
-         */
+        /// <summary>
+        /// __newindex metafunction of CLR objects. Receives the object,
+        /// the member name and the value to be stored as arguments. Throws
+        /// and error if the assignment is invalid.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -1071,7 +1224,8 @@ namespace NLua
         /// <param name="targetType"></param>
         /// <param name="target"></param>
         /// <param name="bindingType"></param>
-        /// <returns>false if unable to find the named member, true for success</returns>
+        /// <param name="detailMessage"></param>
+        /// <returns><see langword="false"/> if unable to find the named member, <see langword="true"/> for success</returns>
         bool TrySetMember(LuaState luaState, ProxyType targetType, object target, BindingFlags bindingType, out string detailMessage)
         {
             detailMessage = null;   // No error yet
@@ -1149,10 +1303,10 @@ namespace NLua
             return false;
         }
 
-        /*
-         * Writes to fields or properties, either static or instance. Throws an error
-         * if the operation is invalid.
-         */
+        /// <summary>
+        /// Writes to fields or properties, either static or instance. Throws an error
+        /// if the operation is invalid.
+        /// </summary>
         private int SetMember(LuaState luaState, ProxyType targetType, object target, BindingFlags bindingType)
         {
             string detail;
@@ -1184,9 +1338,9 @@ namespace NLua
             _translator.ThrowError(luaState, e);
         }
 
-        /*
-         * __index metafunction of type references, works on static members.
-         */
+        /// <summary>
+        /// __index metafunction of type references, works on static members.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -1230,9 +1384,9 @@ namespace NLua
             return GetMember(luaState, klass, null, methodName, BindingFlags.Static);
         }
 
-        /*
-         * __newindex function of type references, works on static members.
-         */
+        /// <summary>
+        /// __newindex function of type references, works on static members.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -1262,9 +1416,9 @@ namespace NLua
             return SetMember(luaState, target, null, BindingFlags.Static);
         }
 
-        /*
-         * __call metafunction of Delegates. 
-         */
+        /// <summary>
+        /// __call metafunction of Delegates. 
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -1328,12 +1482,12 @@ namespace NLua
             return 1;
         }
 
-        /*
-         * __call metafunction of type references. Searches for and calls
-         * a constructor for the type. Returns nil if the constructor is not
-         * found or if the arguments are invalid. Throws an error if the constructor
-         * generates an exception.
-         */
+        /// <summary>
+        /// __call metafunction of type references. Searches for and calls
+        /// a constructor for the type. Returns nil if the constructor is not
+        /// found or if the arguments are invalid. Throws an error if the constructor
+        /// generates an exception.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -1529,11 +1683,11 @@ namespace NLua
 
         }
 
-        /*
-         * Matches a method against its arguments in the Lua stack. Returns
-         * if the match was successful. It it was also returns the information
-         * necessary to invoke the method.
-         */
+        /// <summary>
+        /// Matches a method against its arguments in the Lua stack. Returns
+        /// if the match was successful. It it was also returns the information
+        /// necessary to invoke the method.
+        /// </summary>
         internal bool MatchParameters(LuaState luaState, MethodBase method, MethodCache methodCache, int skipParam)
         {
             var paramInfo = method.GetParameters();

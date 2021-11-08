@@ -1,18 +1,22 @@
-using System;
+﻿using System;
 
 namespace NLua.Method
 {
-	/*
-	 * Parameter information
-	 */
-	class MethodArgs
+    /// <summary>
+    /// Parameter information
+    /// </summary>
+    class MethodArgs
 	{
-		// Position of parameter
-		public int Index;
+        /// <summary>
+        /// Position of parameter
+        /// </summary>
+        public int Index;
 		public Type ParameterType;
 
-		// Type-conversion function
-		public ExtractValue ExtractValue;
+        /// <summary>
+        /// Type-conversion function
+        /// </summary>
+        public ExtractValue ExtractValue;
 		public bool IsParamsArray;
 	}
 }

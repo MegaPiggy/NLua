@@ -90,10 +90,28 @@ namespace NLua.Extensions
             return -1;
         }
 
+        public static void NewUData(this LuaState state, byte val)
+        {
+            IntPtr pointer = state.NewUserData(Marshal.SizeOf(typeof(byte)));
+            Marshal.WriteByte(pointer, val);
+        }
+
+        public static void NewUData(this LuaState state, short val)
+        {
+            IntPtr pointer = state.NewUserData(Marshal.SizeOf(typeof(short)));
+            Marshal.WriteInt16(pointer, val);
+        }
+
         public static void NewUData(this LuaState state, int val)
         {
             IntPtr pointer = state.NewUserData(Marshal.SizeOf(typeof(int)));
             Marshal.WriteInt32(pointer, val);
+        }
+
+        public static void NewUData(this LuaState state, long val)
+        {
+            IntPtr pointer = state.NewUserData(Marshal.SizeOf(typeof(long)));
+            Marshal.WriteInt64(pointer, val);
         }
 
         public static int RawNetObj(this LuaState state, int index)

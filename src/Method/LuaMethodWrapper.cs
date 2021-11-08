@@ -11,15 +11,14 @@ using LuaNativeFunction = KeraLua.LuaFunction;
 
 namespace NLua.Method
 {
-    /*
-     * Argument extraction with type-conversion function
-     */
+    /// <summary>
+    /// Argument extraction with type-conversion function
+    /// </summary>
     delegate object ExtractValue(LuaState luaState, int stackPos);
 
-    /*
-     * Wrapper class for methods/constructors accessed from Lua.
-     * 
-     */
+    /// <summary>
+    /// Wrapper class for methods/constructors accessed from Lua.
+    /// </summary>
     class LuaMethodWrapper
     {
         internal LuaNativeFunction InvokeFunction;
@@ -37,9 +36,9 @@ namespace NLua.Method
         private MethodCache _lastCalledMethod;
 
 
-        /*
-         * Constructs the wrapper for a known MethodBase instance
-         */
+        /// <summary>
+        /// Constructs the wrapper for a known MethodBase instance
+        /// </summary>
         public LuaMethodWrapper(ObjectTranslator translator, object target, ProxyType targetType, MethodBase method)
         {
             InvokeFunction = Call;
@@ -54,9 +53,9 @@ namespace NLua.Method
 
         }
 
-        /*
-         * Constructs the wrapper for a known method name
-         */
+        /// <summary>
+        /// Constructs the wrapper for a known method name
+        /// </summary>
         public LuaMethodWrapper(ObjectTranslator translator, ProxyType targetType, string methodName, BindingFlags bindingType)
         {
             InvokeFunction = Call;
@@ -297,10 +296,9 @@ namespace NLua.Method
             return PushReturnValue(luaState);
         }
 
-        /*
-         * Calls the method. Receives the arguments from the Lua stack
-         * and returns values in it.
-         */
+        /// <summary>
+        /// Calls the method. Receives the arguments from the Lua stack and returns values in it.
+        /// </summary>
         int Call(IntPtr state)
         {
             var luaState = LuaState.FromIntPtr(state);

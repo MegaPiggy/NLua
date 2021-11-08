@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 
 namespace NLua.Method
@@ -16,9 +16,9 @@ namespace NLua.Method
             _pendingEvents = pendingEvents;
         }
 
-        /*
-         * Adds a new event handler
-         */
+        /// <summary>
+        /// Adds a new event handler
+        /// </summary>
         public Delegate Add(LuaFunction function)
         {
             Delegate handlerDelegate = CodeGeneration.Instance.GetDelegate(_eventInfo.EventHandlerType, function);
@@ -33,18 +33,18 @@ namespace NLua.Method
             return handlerDelegate;
         }
 
-        /*
-         * Removes an existing event handler
-         */
+        /// <summary>
+        /// Removes an existing event handler
+        /// </summary>
         public void Remove(Delegate handlerDelegate)
         {
             RemovePending(handlerDelegate);
             _pendingEvents.Remove(handlerDelegate);
         }
 
-        /*
-         * Removes an existing event handler (without updating the pending handlers list)
-         */
+        /// <summary>
+        /// Removes an existing event handler (without updating the pending handlers list)
+        /// </summary>
         internal void RemovePending(Delegate handlerDelegate)
         {
             _eventInfo.RemoveEventHandler(_target, handlerDelegate);

@@ -19,9 +19,12 @@ using LuaNativeFunction = KeraLua.LuaFunction;
 
 namespace NLua
 {
+    /// <summary></summary>
     public class ObjectTranslator
     {
-        // Compare cache entries by exact reference to avoid unwanted aliases
+        /// <summary>
+        /// Compare cache entries by exact reference to avoid unwanted aliases
+        /// </summary>
         private class ReferenceComparer : IEqualityComparer<object>
         {
             public new bool Equals(object x, object y)
@@ -46,9 +49,13 @@ namespace NLua
         private static readonly LuaNativeFunction _ctypeFunction = CType;
         private static readonly LuaNativeFunction _enumFromIntFunction = EnumFromInt;
 
-        // object to object #
+        /// <summary>
+        /// object to object #
+        /// </summary>
         readonly Dictionary<object, int> _objectsBackMap = new Dictionary<object, int>(new ReferenceComparer());
-        // object # to object (FIXME - it should be possible to get object address as an object #)
+        /// <summary>
+        /// object # to object (FIXME - it should be possible to get object address as an object #)
+        /// </summary>
         readonly Dictionary<int, object> _objects = new Dictionary<int, object>();
 
         readonly ConcurrentQueue<int> finalizedReferences = new ConcurrentQueue<int>();
@@ -63,12 +70,22 @@ namespace NLua
         /// </summary>
         int _nextObj;
 
+        /// <summary>
+        /// the metafunctions instance
+        /// </summary>
         public MetaFunctions MetaFunctionsInstance => metaFunctions;
+        /// <summary>
+        /// the lua interpreter
+        /// </summary>
         public Lua Interpreter => interpreter;
+        /// <summary>
+        /// the tag
+        /// </summary>
         public IntPtr Tag => _tagPtr;
 
         readonly IntPtr _tagPtr;
 
+        /// <summary></summary>
         public ObjectTranslator(Lua interpreter, LuaState luaState)
         {
             _tagPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(int)));
@@ -86,9 +103,9 @@ namespace NLua
 
         }
 
-        /*
-         * Sets up the list of objects in the Lua side
-         */
+        /// <summary>
+        /// Sets up the list of objects in the Lua side
+        /// </summary>
         private void CreateLuaObjectList(LuaState luaState)
         {
             luaState.PushString("luaNet_objects");
@@ -101,10 +118,10 @@ namespace NLua
             luaState.SetTable((int)LuaRegistry.Index);
         }
 
-        /*
-         * Registers the indexing function of CLR objects
-         * passed to Lua
-         */
+        /// <summary>
+        /// Registers the indexing function of CLR objects
+        /// passed to Lua
+        /// </summary>
         private void CreateIndexingMetaFunction(LuaState luaState)
         {
             luaState.PushString("luaNet_indexfunction");
@@ -112,10 +129,10 @@ namespace NLua
             luaState.RawSet(LuaRegistry.Index);
         }
 
-        /*
-         * Creates the metatable for superclasses (the base
-         * field of registered tables)
-         */
+        /// <summary>
+        /// Creates the metatable for superclasses (the base
+        /// field of registered tables)
+        /// </summary>
         private void CreateBaseClassMetatable(LuaState luaState)
         {
             luaState.NewMetaTable("luaNet_searchbase");
@@ -134,9 +151,9 @@ namespace NLua
             luaState.SetTop(-2);
         }
 
-        /*
-         * Creates the metatable for type references
-         */
+        /// <summary>
+        /// Creates the metatable for type references
+        /// </summary>
         private void CreateClassMetatable(LuaState luaState)
         {
             luaState.NewMetaTable("luaNet_class");
@@ -158,9 +175,9 @@ namespace NLua
             luaState.SetTop(-2);
         }
 
-        /*
-         * Registers the global functions used by NLua
-         */
+        /// <summary>
+        /// Registers the global functions used by NLua
+        /// </summary>
         private void SetGlobalFunctions(LuaState luaState)
         {
             luaState.PushCFunction(MetaFunctions.IndexFunction);
@@ -183,9 +200,9 @@ namespace NLua
             luaState.SetGlobal("enum");
         }
 
-        /*
-         * Creates the metatable for delegates
-         */
+        /// <summary>
+        /// Creates the metatable for delegates
+        /// </summary>
         private void CreateFunctionMetatable(LuaState luaState)
         {
             luaState.NewMetaTable("luaNet_function");
@@ -198,9 +215,9 @@ namespace NLua
             luaState.SetTop(-2);
         }
 
-        /*
-         * Passes errors (argument e) to the Lua interpreter
-         */
+        /// <summary>
+        /// Passes errors (argument e) to the Lua interpreter
+        /// </summary>
         internal void ThrowError(LuaState luaState, object e)
         {
             // We use this to remove anything pushed by luaL_where
@@ -241,10 +258,10 @@ namespace NLua
             Push(luaState, e);
         }
 
-        /*
-         * Implementation of load_assembly. Throws an error
-         * if the assembly is not found.
-         */
+        /// <summary>
+        /// Implementation of load_assembly. Throws an error
+        /// if the assembly is not found.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -334,21 +351,23 @@ namespace NLua
             return null;
         }
 
+        /// <summary></summary>
         public bool TryGetExtensionMethod(Type type, string name, out MethodInfo method)
         {
             method = GetExtensionMethod(type, name);
             return method != null;
         }
 
+        /// <summary></summary>
         public MethodInfo GetExtensionMethod(Type type, string name)
         {
             return type.GetExtensionMethod(name, assemblies);
         }
 
-        /*
-         * Implementation of import_type. Returns nil if the
-         * type is not found.
-         */
+        /// <summary>
+        /// Implementation of import_type. Returns nil if the
+        /// type is not found.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -372,11 +391,11 @@ namespace NLua
             return 1;
         }
 
-        /*
-         * Implementation of make_object. Registers a table (first
-         * argument in the stack) as an object subclassing the
-         * type passed as second argument in the stack.
-         */
+        /// <summary>
+        /// Implementation of make_object. Registers a table (first
+        /// argument in the stack) as an object subclassing the
+        /// type passed as second argument in the stack.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -440,10 +459,10 @@ namespace NLua
             return 0;
         }
 
-        /*
-         * Implementation of free_object. Clears the metatable and the
-         * base field, freeing the created object for garbage-collection
-         */
+        /// <summary>
+        /// Implementation of free_object. Clears the metatable and the
+        /// base field, freeing the created object for garbage-collection
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -497,10 +516,10 @@ namespace NLua
             return 0;
         }
 
-        /*
-         * Implementation of get_method_bysig. Returns nil
-         * if no matching method is not found.
-         */
+        /// <summary>
+        /// Implementation of get_method_bysig. Returns nil
+        /// if no matching method is not found.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -562,10 +581,10 @@ namespace NLua
             return 1;
         }
 
-        /*
-         * Implementation of get_constructor_bysig. Returns nil
-         * if no matching constructor is found.
-         */
+        /// <summary>
+        /// Implementation of get_constructor_bysig. Returns nil
+        /// if no matching constructor is found.
+        /// </summary>
 #if __IOS__ || __TVOS__ || __WATCHOS__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
@@ -614,27 +633,27 @@ namespace NLua
             return 1;
         }
 
-        /*
-         * Pushes a type reference into the stack
-         */
+        /// <summary>
+        /// Pushes a type reference into the stack
+        /// </summary>
         internal void PushType(LuaState luaState, Type t)
         {
             PushObject(luaState, new ProxyType(t), "luaNet_class");
         }
 
-        /*
-         * Pushes a delegate into the stack
-         */
+        /// <summary>
+        /// Pushes a delegate into the stack
+        /// </summary>
         internal void PushFunction(LuaState luaState, LuaNativeFunction func)
         {
             PushObject(luaState, func, "luaNet_function");
         }
 
 
-        /*
-         * Pushes a CLR object into the Lua stack as an userdata
-         * with the provided metatable
-         */
+        /// <summary>
+        /// Pushes a CLR object into the Lua stack as an userdata
+        /// with the provided metatable
+        /// </summary>
         internal void PushObject(LuaState luaState, object o, string metatable)
         {
             int index = -1;
@@ -676,10 +695,10 @@ namespace NLua
             PushNewObject(luaState, o, index, metatable);
         }
 
-        /*
-         * Pushes a new object into the Lua stack with the provided
-         * metatable
-         */
+        /// <summary>
+        /// Pushes a new object into the Lua stack with the provided
+        /// metatable
+        /// </summary>
         private void PushNewObject(LuaState luaState, object o, int index, string metatable)
         {
             if (metatable == "luaNet_metatable")
@@ -766,10 +785,22 @@ namespace NLua
                 luaState.PushCFunction(MetaFunctions.DivisionFunction);
                 luaState.RawSet(-3);
             }
+            if (type.HasFloorDivisionOperator())
+            {
+                luaState.PushString("__idiv");
+                luaState.PushCFunction(MetaFunctions.FloorDivisionFunction);
+                luaState.RawSet(-3);
+            }
             if (type.HasModulusOperator())
             {
                 luaState.PushString("__mod");
                 luaState.PushCFunction(MetaFunctions.ModulosFunction);
+                luaState.RawSet(-3);
+            }
+            if (type.HasPowerOperator())
+            {
+                luaState.PushString("__pow");
+                luaState.PushCFunction(MetaFunctions.PowerFunction);
                 luaState.RawSet(-3);
             }
             if (type.HasUnaryNegationOperator())
@@ -796,12 +827,48 @@ namespace NLua
                 luaState.PushCFunction(MetaFunctions.LessThanOrEqualFunction);
                 luaState.RawSet(-3);
             }
+            if (type.HasBandOperator())
+            {
+                luaState.PushString("__band");
+                luaState.PushCFunction(MetaFunctions.BitwiseAndFunction);
+                luaState.RawSet(-3);
+            }
+            if (type.HasBorOperator())
+            {
+                luaState.PushString("__bor");
+                luaState.PushCFunction(MetaFunctions.BitwiseOrFunction);
+                luaState.RawSet(-3);
+            }
+            if (type.HasBxorOperator())
+            {
+                luaState.PushString("__bxor");
+                luaState.PushCFunction(MetaFunctions.BitwiseXorFunction);
+                luaState.RawSet(-3);
+            }
+            if (type.HasBnotOperator())
+            {
+                luaState.PushString("__bnot");
+                luaState.PushCFunction(MetaFunctions.BitwiseNotFunction);
+                luaState.RawSet(-3);
+            }
+            if (type.HasShlOperator())
+            {
+                luaState.PushString("__shl");
+                luaState.PushCFunction(MetaFunctions.ShiftLeftFunction);
+                luaState.RawSet(-3);
+            }
+            if (type.HasShrOperator())
+            {
+                luaState.PushString("__shr");
+                luaState.PushCFunction(MetaFunctions.ShiftRightFunction);
+                luaState.RawSet(-3);
+            }
         }
 
-        /*
-         * Gets an object from the Lua stack with the desired type, if it matches, otherwise
-         * returns null.
-         */
+        /// <summary>
+        /// Gets an object from the Lua stack with the desired type, if it matches, otherwise
+        /// returns null.
+        /// </summary>
         internal object GetAsType(LuaState luaState, int stackPos, Type paramType)
         {
             var extractor = typeChecker.CheckLuaType(luaState, stackPos, paramType);
@@ -846,9 +913,9 @@ namespace NLua
             return index;
         }
 
-        /*
-         * Gets an object from the Lua stack according to its Lua type.
-         */
+        /// <summary>
+        /// Gets an object from the Lua stack according to its Lua type.
+        /// </summary>
         internal object GetObject(LuaState luaState, int index)
         {
             LuaType type = luaState.Type(index);
@@ -882,9 +949,9 @@ namespace NLua
             }
         }
 
-        /*
-         * Gets the table in the index positon of the Lua stack.
-         */
+        /// <summary>
+        /// Gets the table in the index positon of the Lua stack.
+        /// </summary>
         internal LuaTable GetTable(LuaState luaState, int index)
         {
             // Before create new tables, check if there is any finalized object to clean.
@@ -897,9 +964,9 @@ namespace NLua
             return new LuaTable(reference, interpreter);
         }
 
-        /*
-         * Gets the thread in the index positon of the Lua stack.
-         */
+        /// <summary>
+        /// Gets the thread in the index positon of the Lua stack.
+        /// </summary>
         internal LuaThread GetThread(LuaState luaState, int index)
         {
             // Before create new tables, check if there is any finalized object to clean.
@@ -912,9 +979,11 @@ namespace NLua
             return new LuaThread(reference, interpreter);
         }
 
-        /*
-         * Gets the userdata in the index positon of the Lua stack.
-         */
+        const string FileTypeName = "FILE*";
+
+        /// <summary>
+        /// Gets the userdata in the index positon of the Lua stack.
+        /// </summary>
         internal LuaUserData GetUserData(LuaState luaState, int index)
         {
             // Before create new tables, check if there is any finalized object to clean.
@@ -924,12 +993,54 @@ namespace NLua
             int reference = luaState.Ref(LuaRegistry.Index);
             if (reference == -1)
                 return null;
+
+            luaState.GetRef(reference);
+            IntPtr p = luaState.TestUserData(1, FileTypeName);
+            if (p != null)
+                return new LuaFile(reference, interpreter, p);
+
             return new LuaUserData(reference, interpreter);
         }
 
-        /*
-         * Gets the function in the index positon of the Lua stack.
-         */
+        /// <summary>
+        /// Gets the file in the index positon of the Lua stack.
+        /// </summary>
+        internal LuaFile GetFile(LuaState luaState, int index)
+        {
+            // Before create new tables, check if there is any finalized object to clean.
+            CleanFinalizedReferences(luaState);
+
+            luaState.PushCopy(index);
+            int reference = luaState.Ref(LuaRegistry.Index);
+            if (reference == -1)
+                return null;
+
+            luaState.GetRef(reference);
+            IntPtr p = luaState.TestUserData(1, FileTypeName);
+            if (p != null)
+                return new LuaFile(reference, interpreter, p);
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the lightuserdata in the index positon of the Lua stack.
+        /// </summary>
+        internal LuaLightUserData GetLightUserData(LuaState luaState, int index)
+        {
+            // Before create new tables, check if there is any finalized object to clean.
+            CleanFinalizedReferences(luaState);
+
+            luaState.PushCopy(index);
+            int reference = luaState.Ref(LuaRegistry.Index);
+            if (reference == -1)
+                return null;
+            return new LuaLightUserData(reference, interpreter);
+        }
+
+        /// <summary>
+        /// Gets the function in the index positon of the Lua stack.
+        /// </summary>
         internal LuaFunction GetFunction(LuaState luaState, int index)
         {
             // Before create new tables, check if there is any finalized object to clean.
@@ -942,20 +1053,20 @@ namespace NLua
             return new LuaFunction(reference, interpreter);
         }
 
-        /*
-         * Gets the CLR object in the index positon of the Lua stack. Returns
-         * delegates as Lua functions.
-         */
+        /// <summary>
+        /// Gets the CLR object in the index positon of the Lua stack. Returns
+        /// delegates as Lua functions.
+        /// </summary>
         internal object GetNetObject(LuaState luaState, int index)
         {
             int idx = luaState.ToNetObject(index, Tag);
             return idx != -1 ? _objects[idx] : null;
         }
 
-        /*
-         * Gets the CLR object in the index position of the Lua stack. Returns
-         * delegates as is.
-         */
+        /// <summary>
+        /// Gets the CLR object in the index position of the Lua stack. Returns
+        /// delegates as is.
+        /// </summary>
         internal object GetRawNetObject(LuaState luaState, int index)
         {
             int udata = luaState.RawNetObj(index);
@@ -963,10 +1074,10 @@ namespace NLua
         }
 
 
-        /*
-         * Gets the values from the provided index to
-         * the top of the stack and returns them in an array.
-         */
+        /// <summary>
+        /// Gets the values from the provided index to
+        /// the top of the stack and returns them in an array.
+        /// </summary>
         internal object[] PopValues(LuaState luaState, int oldTop)
         {
             int newTop = luaState.GetTop();
@@ -982,11 +1093,11 @@ namespace NLua
             return returnValues.ToArray();
         }
 
-        /*
-         * Gets the values from the provided index to
-         * the top of the stack and returns them in an array, casting
-         * them to the provided types.
-         */
+        /// <summary>
+        /// Gets the values from the provided index to
+        /// the top of the stack and returns them in an array, casting
+        /// them to the provided types.
+        /// </summary>
         internal object[] PopValues(LuaState luaState, int oldTop, Type[] popTypes)
         {
             int newTop = luaState.GetTop();
@@ -1025,9 +1136,9 @@ namespace NLua
             return false;
         }
 
-        /*
-         * Pushes the object into the Lua stack according to its type.
-         */
+        /// <summary>
+        /// Pushes the object into the Lua stack according to its type.
+        /// </summary>
         internal void Push(LuaState luaState, object o)
         {
             if (o == null)
@@ -1054,8 +1165,15 @@ namespace NLua
                 luaState.PushNumber(fl);
             else if(o is decimal dc)
                 luaState.PushNumber((double)dc);
-            else if(o is double db)
+            else if (o is double db)
                 luaState.PushNumber(db);
+            else if (o is LuaNumber number)
+            {
+                if (number.IsInteger())
+                    luaState.PushInteger((long)number);
+                else
+                    luaState.PushNumber((double)number);
+            }
             else if (o is string str)
                 luaState.PushString(str);
             else if (o is bool b)
@@ -1066,20 +1184,33 @@ namespace NLua
                 table.Push(luaState);
             else if (o is LuaThread thread)
                 thread.Push(luaState);
+            else if (o is Lua interpreter)
+                interpreter.Thread.Push(luaState);
+            else if (o is LuaState state)
+            {
+                int oldTop = state.GetTop();
+                state.PushThread();
+                ((LuaThread)GetObject(state, -1)).Push(luaState);
+                state.SetTop(oldTop);
+            }
             else if (o is LuaNativeFunction nativeFunction)
                 PushFunction(luaState, nativeFunction);
             else if (o is LuaFunction luaFunction)
                 luaFunction.Push(luaState);
             else if (o is LuaUserData userData)
                 userData.Push(luaState);
+            else if (o is LuaLightUserData lightUserData)
+                lightUserData.Push(luaState);
+            else if (o is LuaBase @base)
+                luaState.GetRef(@base.GetHashCode());
             else
                 PushObject(luaState, o, "luaNet_metatable");
         }
 
-        /*
-         * Checks if the method matches the arguments in the Lua stack, getting
-         * the arguments if it does.
-         */
+        /// <summary>
+        /// Checks if the method matches the arguments in the Lua stack, getting
+        /// the arguments if it does.
+        /// </summary>
         internal bool MatchParameters(LuaState luaState, MethodBase method, MethodCache methodCache, int skipParam)
         {
             return metaFunctions.MatchParameters(luaState, method, methodCache, skipParam);

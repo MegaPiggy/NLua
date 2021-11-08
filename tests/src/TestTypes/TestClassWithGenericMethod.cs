@@ -37,7 +37,7 @@
 
         internal bool Validate<T>(T value)
         {
-            return value.Equals(_PassedValue);
+            return _PassedValue.Equals(value);
         }
     }
 }

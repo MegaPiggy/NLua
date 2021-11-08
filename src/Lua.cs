@@ -16,7 +16,7 @@ using NLua.Extensions;
 
 using LuaState = KeraLua.Lua;
 using LuaNativeFunction = KeraLua.LuaFunction;
-
+using System.Text;
 
 namespace NLua
 {
@@ -49,6 +49,9 @@ namespace NLua
         /// </summary>
         public bool IsExecuting => _executing;
 
+        /// <summary>
+        /// Lua state object
+        /// </summary>
         public LuaState State => _luaState;
 
         private ObjectTranslator _translator;
@@ -213,6 +216,10 @@ namespace NLua
 //   end
 //end
 //";
+
+        /// <summary>
+        /// Whether to push to the debug traceback.
+        /// </summary>
         public bool UseTraceback { get; set; } = false;
 
         /// <summary>
@@ -273,6 +280,9 @@ namespace NLua
             }
         }
 
+        /// <summary>
+        /// Create a new lua state
+        /// </summary>
         public Lua()
         {
             _luaState = new LuaState();
@@ -281,9 +291,9 @@ namespace NLua
             _luaState.AtPanic(PanicCallback);
         }
 
-        /*
-            * CAUTION: NLua.Lua instances can't share the same lua state! 
-            */
+        /// <summary>
+        /// CAUTION: <see cref="NLua.Lua"/> instances can't share the same lua state! 
+        /// </summary>
         public Lua(LuaState luaState)
         {
             luaState.PushString("NLua_Loaded");
@@ -325,6 +335,9 @@ namespace NLua
             _luaState.DoString(InitLuanet);
         }
 
+        /// <summary>
+        /// Destroys all objects in the given Lua state (calling the corresponding garbage-collection metamethods, if any) and frees all dynamic memory used by this state
+        /// </summary>
         public void Close()
         {
             if (_StatePassed || _luaState == null)
@@ -411,19 +424,19 @@ namespace NLua
         }
 
         /// <summary>
-        /// 
+        /// Load a Lua chunk.
         /// </summary>
-        /// <param name = "chunk"></param>
-        /// <param name = "name"></param>
-        /// <returns></returns>
-        public LuaFunction LoadString(string chunk, string name)
+        /// <param name = "chunk">Chunk to load</param>
+        /// <param name = "chunkName">Name to associate with the chunk. Defaults to "chunk".</param>
+        /// <returns>a LuaFunction to execute the chunk loaded (useful to see if the syntax of a file is ok)</returns>
+        public LuaFunction LoadString(string chunk, string chunkName = "chunk")
         {
             int oldTop = _luaState.GetTop();
             _executing = true;
 
             try
             {
-                if (_luaState.LoadString(chunk, name) != LuaStatus.OK)
+                if (_luaState.LoadString(chunk, chunkName) != LuaStatus.OK)
                     ThrowExceptionFromError(oldTop);
             }
             finally
@@ -437,19 +450,19 @@ namespace NLua
         }
 
         /// <summary>
-        /// 
+        /// Load a Lua chunk.
         /// </summary>
-        /// <param name = "chunk"></param>
-        /// <param name = "name"></param>
-        /// <returns></returns>
-        public LuaFunction LoadString(byte[] chunk, string name)
+        /// <param name = "chunk">Chunk to load</param>
+        /// <param name = "chunkName">Name to associate with the chunk. Defaults to "chunk".</param>
+        /// <returns>a LuaFunction to execute the chunk loaded (useful to see if the syntax of a file is ok)</returns>
+        public LuaFunction LoadString(byte[] chunk, string chunkName = "chunk")
         {
             int oldTop = _luaState.GetTop();
             _executing = true;
 
             try
             {
-                if (_luaState.LoadBuffer(chunk, name) != LuaStatus.OK)
+                if (_luaState.LoadBuffer(chunk, chunkName) != LuaStatus.OK)
                     ThrowExceptionFromError(oldTop);
             }
             finally
@@ -463,10 +476,10 @@ namespace NLua
         }
 
         /// <summary>
-        /// Load a File on, and return a LuaFunction to execute the file loaded (useful to see if the syntax of a file is ok)
+        /// Load a Lua file.
         /// </summary>
-        /// <param name = "fileName"></param>
-        /// <returns></returns>
+        /// <param name = "fileName">File to load</param>
+        /// <returns>a LuaFunction to execute the file loaded (useful to see if the syntax of a file is ok)</returns>
         public LuaFunction LoadFile(string fileName)
         {
             int oldTop = _luaState.GetTop();
@@ -480,11 +493,11 @@ namespace NLua
         }
 
         /// <summary>
-        /// Executes a Lua chunk and returns all the chunk's return values in an array.
+        /// Executes a Lua chunk.
         /// </summary>
         /// <param name = "chunk">Chunk to execute</param>
         /// <param name = "chunkName">Name to associate with the chunk. Defaults to "chunk".</param>
-        /// <returns></returns>
+        /// <returns>all the chunk's return values in an array</returns>
         public object[] DoString(byte[] chunk, string chunkName = "chunk")
         {
             int oldTop = _luaState.GetTop();
@@ -515,11 +528,11 @@ namespace NLua
         }
 
         /// <summary>
-        /// Executes a Lua chunk and returns all the chunk's return values in an array.
+        /// Executes a Lua chunk.
         /// </summary>
         /// <param name = "chunk">Chunk to execute</param>
         /// <param name = "chunkName">Name to associate with the chunk. Defaults to "chunk".</param>
-        /// <returns></returns>
+        /// <returns>all the chunk's return values in an array</returns>
         public object[] DoString(string chunk, string chunkName = "chunk")
         {
             int oldTop = _luaState.GetTop();
@@ -549,10 +562,10 @@ namespace NLua
             }
         }
 
-        /*
-        * Executes a Lua file and returns all the chunk's return
-        * values in an array
-        */
+        /// <summary>
+        /// Executes a Lua file.
+        /// </summary>
+        /// <returns>all the chunk's return values in an array</returns>
         public object[] DoFile(string fileName)
         {
             int oldTop = _luaState.GetTop();
@@ -582,6 +595,9 @@ namespace NLua
             }
         }
 
+        /// <summary>
+        /// Gets an object global variable
+        /// </summary>
         public object GetObjectFromPath(string fullPath)
         {
             int oldTop = _luaState.GetTop();
@@ -602,6 +618,9 @@ namespace NLua
             return returnValue;
         }
 
+        /// <summary>
+        /// Sets an object to the global variable
+        /// </summary>
         public void SetObjectToPath(string fullPath, object value)
         {
             int oldTop = _luaState.GetTop();
@@ -635,10 +654,12 @@ namespace NLua
                     RegisterGlobal(fullPath, value.GetType(), 0);
             }
         }
-        /*
-            * Indexer for global variables from the LuaInterpreter
-            * Supports navigation of tables by using . operator
-            */
+
+        /// <summary>
+        /// Indexer for global variables from the LuaInterpreter
+        /// <br/>
+        /// Supports navigation of tables by using . operator
+        /// </summary>
         public object this[string fullPath] {
             get
             {
@@ -737,10 +758,10 @@ namespace NLua
         }
         #endregion
 
-        /*
-            * Navigates a table in the top of the stack, returning
-            * the value of the specified field
-            */
+        /// <summary>
+        /// Navigates a table in the top of the stack
+        /// </summary>
+        /// <returns>the value of the specified field</returns>
         object GetObject(string[] remainingPath)
         {
             object returnValue = null;
@@ -758,129 +779,172 @@ namespace NLua
             return returnValue;
         }
 
-        /*
-            * Gets a numeric global variable
-            */
-        public double GetNumber(string fullPath)
-        {
-            // Silently convert Lua integer to double for backward compatibility with GetNumber method
-            object obj = GetObjectFromPath(fullPath);
-            if (obj is long l)
-                return l;
-            return (double)obj;
-        }
+        /// <summary>
+        /// Gets a numeric global variable
+        /// </summary>
+        public LuaNumber GetNumber(string fullPath) => new LuaNumber(GetObjectFromPath(fullPath));
 
-        public int GetInteger(string fullPath)
-        {
-            object result = GetObjectFromPath(fullPath);
-            if (result == null)
-                return 0;
+        /// <summary>
+        /// Gets a <see cref="float"/> global variable
+        /// </summary>
+        public float GetFloat(string fullPath) => (float)GetNumber(fullPath);
 
-            return (int)(long)result;
-        }
+        /// <summary>
+        /// Gets a <see cref="double"/> global variable
+        /// </summary>
+        public double GetDouble(string fullPath) => (double)GetNumber(fullPath);
 
-        public long GetLong(string fullPath)
-        {
-            object result = GetObjectFromPath(fullPath);
-            if (result == null)
-                return 0L;
+        /// <summary>
+        /// Gets a <see cref="int"/> global variable
+        /// </summary>
+        public int GetInteger(string fullPath) => (int)GetNumber(fullPath);
 
-            return (long)result;
-        }
+        /// <summary>
+        /// Gets a <see cref="long"/> global variable
+        /// </summary>
+        public long GetLong(string fullPath) => (long)GetNumber(fullPath);
 
-        /*
-            * Gets a string global variable
-            */
+        /// <summary>
+        /// Gets a <see cref="char"/> global variable
+        /// </summary>
+        public char GetChar(string fullPath) => (char)GetNumber(fullPath);
+
+        /// <summary>
+        /// Gets a <see cref="bool"/> global variable
+        /// </summary>
+        public bool GetBoolean(string fullPath) => (bool)GetNumber(fullPath);
+
+        /// <summary>
+        /// Gets a <see cref="string"/> global variable
+        /// </summary>
         public string GetString(string fullPath)
         {
             object obj = GetObjectFromPath(fullPath);
             if (obj == null)
-                return null;
+                return string.Empty;
 
             return obj.ToString();
         }
 
-        /*
-            * Gets a table global variable
-            */
+        /// <summary>
+        /// Gets a table global variable
+        /// </summary>
         public LuaTable GetTable(string fullPath)
         {
             return (LuaTable)GetObjectFromPath(fullPath);
         }
 
-        /*
-            * Gets a table global variable as an object implementing
-            * the interfaceType interface
-            */
+        /// <summary>
+        /// Gets a table global variable as an object implementing
+        /// the interfaceType interface
+        /// </summary>
         public object GetTable(Type interfaceType, string fullPath)
         {
             return CodeGeneration.Instance.GetClassInstance(interfaceType, GetTable(fullPath));
         }
 
-        /*
-            * Gets a thread global variable
-            */
+        /// <summary>
+        /// Gets a userdata global variable
+        /// </summary>
+        public LuaUserData GetUserData(string fullPath)
+        {
+            return (LuaUserData)GetObjectFromPath(fullPath);
+        }
+
+        /// <summary>
+        /// Gets a lightuserdata global variable
+        /// </summary>
+        public LuaLightUserData GetLightUserData(string fullPath)
+        {
+            return (LuaLightUserData)GetObjectFromPath(fullPath);
+        }
+
+        /// <summary>
+        /// Gets a thread global variable
+        /// </summary>
         public LuaThread GetThread(string fullPath)
         {
             return (LuaThread)GetObjectFromPath(fullPath);
         }
 
-        /*
-            * Gets a function global variable
-            */
+        /// <summary>
+        /// Gets a function global variable
+        /// </summary>
         public LuaFunction GetFunction(string fullPath)
         {
             object obj = GetObjectFromPath(fullPath);
             var luaFunction = obj as LuaFunction;
             if (luaFunction != null)
                 return luaFunction;
-
+            
             luaFunction = new LuaFunction((LuaNativeFunction) obj, this);
             return luaFunction;
         }
 
-        /*
-            * Register a delegate type to be used to convert Lua functions to C# delegates (useful for iOS where there is no dynamic code generation)
-            * type delegateType
-            */
+        /// <summary>
+        /// Gets an object global variable
+        /// </summary>
+        /// <typeparam name="T">Type of object</typeparam>
+        public T GetObject<T>(string fullPath, T customDefault = default(T))
+        {
+            object obj = GetObjectFromPath(fullPath);
+            if (obj == null)
+                return customDefault;
+
+            return (T)obj;
+        }
+
+        /// <summary>
+        /// Register a delegate type to be used to convert Lua functions to C# delegates (useful for iOS where there is no dynamic code generation)
+        /// type delegateType
+        /// </summary>
         public void RegisterLuaDelegateType(Type delegateType, Type luaDelegateType)
         {
             CodeGeneration.Instance.RegisterLuaDelegateType(delegateType, luaDelegateType);
         }
 
+        /// <summary>
+        /// Register a class type
+        /// </summary>
         public void RegisterLuaClassType(Type klass, Type luaClass)
         {
             CodeGeneration.Instance.RegisterLuaClassType(klass, luaClass);
         }
 
         // ReSharper disable once InconsistentNaming
+        /// <summary>
+        /// To access any .NET assembly to create objects, events etc inside Lua you need to ask NLua to use CLR as a Lua package.
+        /// <br/>
+        /// To do this just use this method and use the import function inside your Lua script to load the Assembly.
+        /// </summary>
         public void LoadCLRPackage()
         {
             _luaState.DoString(ClrPackage);
         }
-        /*
-            * Gets a function global variable as a delegate of
-            * type delegateType
-            */
+
+        /// <summary>
+        /// Gets a function global variable as a delegate of
+        /// type delegateType
+        /// </summary>
         public Delegate GetFunction(Type delegateType, string fullPath)
         {
             return CodeGeneration.Instance.GetDelegate(delegateType, GetFunction(fullPath));
         }
 
-        /*
-            * Calls the object as a function with the provided arguments, 
-            * returning the function's returned values inside an array
-            */
+        /// <summary>
+        /// Calls the object as a function with the provided arguments, 
+        /// returning the function's returned values inside an array
+        /// </summary>
         internal object[] CallFunction(object function, object[] args)
         {
             return CallFunction(function, args, null);
         }
 
-        /*
-            * Calls the object as a function with the provided arguments and
-            * casting returned values to the types in returnTypes before returning
-            * them in an array
-            */
+        /// <summary>
+        /// Calls the object as a function with the provided arguments and
+        /// casting returned values to the types in returnTypes before returning
+        /// them in an array
+        /// </summary>
         internal object[] CallFunction(object function, object[] args, Type[] returnTypes)
         {
             int nArgs = 0;
@@ -925,9 +989,9 @@ namespace NLua
             return _translator.PopValues(_luaState, oldTop);
         }
 
-        /*
-            * Navigates a table to set the value of one of its fields
-            */
+        /// <summary>
+        /// Navigates a table to set the value of one of its fields
+        /// </summary>
         void SetObject(string[] remainingPath, object val)
         {
             for (int i = 0; i < remainingPath.Length - 1; i++)
@@ -945,10 +1009,34 @@ namespace NLua
         {
             return fullPath.SplitWithEscape('.', '\\').ToArray();
         }
-        /*
-            * Creates a new table as a global variable or as a field
-            * inside an existing table
-            */
+
+        ///// <summary>
+        ///// Creates a new function
+        ///// </summary>
+        //public LuaFunction NewFunction(byte[] chunk, string chunkName = "chunk") => (LuaFunction)DoString(chunk.Prepend(Encoding.ASCII.GetBytes("return function()\n")).Append(Encoding.ASCII.GetBytes("\nend")).ToArray(), chunkName).FirstOrDefault();
+
+        ///// <summary>
+        ///// Creates a new function
+        ///// </summary>
+        //public LuaFunction NewFunction(string chunk, string chunkName = "chunk") => (LuaFunction)DoString($"return function()\n{chunk}\nend", chunkName).FirstOrDefault();
+
+        /// <summary>
+        /// Creates a new table
+        /// </summary>
+        public LuaTable NewTable()
+        {
+            int oldTop = _luaState.GetTop();
+
+            _luaState.NewTable();
+            LuaTable table = (LuaTable)_translator.GetObject(_luaState, -1);
+
+            _luaState.SetTop(oldTop);
+            return table;
+        }
+
+        /// <summary>
+        /// Creates a new table as a global variable or as a field inside an existing table
+        /// </summary>
         public void NewTable(string fullPath)
         {
             string[] path = FullPathToArray(fullPath);
@@ -974,9 +1062,12 @@ namespace NLua
                 _luaState.SetTable(-3);
             }
 
-            _luaState.SetTop( oldTop);
+            _luaState.SetTop(oldTop);
         }
 
+        /// <summary>
+        /// Convert table to dictionary
+        /// </summary>
         public Dictionary<object, object> GetTableDict(LuaTable table)
         {
             if (table == null)
@@ -997,10 +1088,6 @@ namespace NLua
             return dict;
         }
 
-        /*
-         * Lets go of a previously allocated reference to a table, function
-         * or userdata
-         */
         #region lua debug functions
         /// <summary>
         /// Activates the debug hook
@@ -1070,11 +1157,18 @@ namespace NLua
             return _luaState.SetLocal(luaDebug, n);
         }
 
+        /// <summary>
+        /// Gets information about the interpreter runtime stack.
+        /// </summary>
         public int GetStack(int level, ref LuaDebug ar)
         {
             return _luaState.GetStack(level, ref ar);
         }
 
+        /// <summary>
+        /// Gets information about a specific function or function invocation.
+        /// </summary>
+        /// <returns>This function returns <see langword="false"/> on error (for instance, an invalid option in what).</returns>
         public bool GetInfo(string what, ref LuaDebug ar)
         {
             return _luaState.GetInfo(what, ref ar);
@@ -1169,6 +1263,9 @@ namespace NLua
         }
         #endregion
 
+        /// <summary>
+        /// Lets go of a previously allocated reference to a table, function or userdata
+        /// </summary>
         internal void DisposeInternal(int reference, bool finalized)
         {
             if (finalized && _translator != null)
@@ -1181,10 +1278,9 @@ namespace NLua
                 _luaState.Unref(reference);
         }
 
-        /*
-         * Gets a field of the table corresponding to the provided reference
-         * using rawget (do not use metatables)
-         */
+        /// <summary>
+        /// Gets a field of the table corresponding to the provided reference using rawget (do not use metatables)
+        /// </summary>
         internal object RawGetObject(int reference, string field)
         {
             int oldTop = _luaState.GetTop();
@@ -1196,9 +1292,9 @@ namespace NLua
             return obj;
         }
 
-        /*
-         * Gets a field of the table or userdata corresponding to the provided reference
-         */
+        /// <summary>
+        /// Gets a field of the table or userdata corresponding the the provided reference
+        /// </summary>
         internal object GetObject(int reference, string field)
         {
             int oldTop = _luaState.GetTop();
@@ -1208,9 +1304,9 @@ namespace NLua
             return returnValue;
         }
 
-        /*
-         * Gets a numeric field of the table or userdata corresponding the the provided reference
-         */
+        /// <summary>
+        /// Gets a numeric field of the table or userdata corresponding the the provided reference
+        /// </summary>
         internal object GetObject(int reference, object field)
         {
             int oldTop = _luaState.GetTop();
@@ -1222,10 +1318,9 @@ namespace NLua
             return returnValue;
         }
 
-        /*
-         * Sets a field of the table or userdata corresponding the the provided reference
-         * to the provided value
-         */
+        /// <summary>
+        /// Sets a field of the table or userdata corresponding the the provided reference to the provided value
+        /// </summary>
         internal void SetObject(int reference, string field, object val)
         {
             int oldTop = _luaState.GetTop();
@@ -1234,10 +1329,9 @@ namespace NLua
             _luaState.SetTop(oldTop);
         }
 
-        /*
-         * Sets a numeric field of the table or userdata corresponding the the provided reference
-         * to the provided value
-         */
+        /// <summary>
+        /// Sets a numeric field of the table or userdata corresponding the the provided reference to the provided value
+        /// </summary>
         internal void SetObject(int reference, object field, object val)
         {
             int oldTop = _luaState.GetTop();
@@ -1248,9 +1342,9 @@ namespace NLua
             _luaState.SetTop(oldTop);
         }
 
-        /*
-            * Gets the luaState from the thread
-            */
+        /// <summary>
+        /// Gets the luaState from the thread
+        /// </summary>
         internal LuaState GetThreadState(int reference)
         {
             int oldTop = _luaState.GetTop();
@@ -1260,6 +1354,9 @@ namespace NLua
             return state;
         }
 
+        /// <summary>
+        /// Exchange values between different threads of the same state.
+        /// </summary>
         public void XMove(LuaState to, object val, int index = 1)
         {
             int oldTop = _luaState.GetTop();
@@ -1270,6 +1367,9 @@ namespace NLua
             _luaState.SetTop(oldTop);
         }
 
+        /// <summary>
+        /// Exchange values between different threads of the same state.
+        /// </summary>
         public void XMove(Lua to, object val, int index = 1)
         {
             int oldTop = _luaState.GetTop();
@@ -1280,6 +1380,9 @@ namespace NLua
             _luaState.SetTop(oldTop);
         }
 
+        /// <summary>
+        /// Exchange values between different threads of the same state.
+        /// </summary>
         public void XMove(LuaThread thread, object val, int index = 1)
         {
             int oldTop = _luaState.GetTop();
@@ -1290,9 +1393,9 @@ namespace NLua
             _luaState.SetTop(oldTop);
         }
 
-        /*
-            * Creates a new empty thread
-            */
+        /// <summary>
+        /// Creates a new empty thread
+        /// </summary>
         public LuaState NewThread(out LuaThread thread)
         {
             int oldTop = _luaState.GetTop();
@@ -1304,10 +1407,9 @@ namespace NLua
             return state;
         }
 
-        /*
-            * Creates a new empty thread as a global variable or as a field
-            * inside an existing table
-            */
+        /// <summary>
+        /// Creates a new empty thread as a global variable or as a field inside an existing table
+        /// </summary>
         public LuaState NewThread(string fullPath)
         {
             string[] path = FullPathToArray(fullPath);
@@ -1339,9 +1441,9 @@ namespace NLua
             return state;
         }
 
-        /*
-            * Creates a new coroutine thread
-            */
+        /// <summary>
+        /// Creates a new coroutine thread
+        /// </summary>
         public LuaState NewThread(LuaFunction function, out LuaThread thread)
         {
             int oldTop = _luaState.GetTop();
@@ -1356,10 +1458,9 @@ namespace NLua
             return state;
         }
 
-        /*
-            * Creates a new coroutine thread as a global variable or as a field
-            * inside an existing table
-            */
+        /// <summary>
+        /// Creates a new coroutine thread as a global variable or as a field inside an existing table
+        /// </summary>
         public void NewThread(string fullPath, LuaFunction function)
         {
             string[] path = FullPathToArray(fullPath);
@@ -1393,15 +1494,43 @@ namespace NLua
             _luaState.SetTop(oldTop);
         }
 
+        /// <summary>
+        /// Creates an empty userdata
+        /// </summary>
+        /// <param name="needsMetatable">Whether the usedata should have a metatable</param>
+        /// <returns>the created userdata</returns>
+        public LuaUserData NewProxy(bool needsMetatable = false)
+        {
+            int oldTop = _luaState.GetTop();
+
+            _luaState.NewIndexedUserData(0, 0);
+            LuaUserData userData = (LuaUserData)_translator.GetObject(_luaState, -1);
+
+            if (needsMetatable)
+            {
+                _luaState.NewTable();
+                _luaState.SetMetaTable(-2);
+            }
+
+            _luaState.SetTop(oldTop);
+            return userData;
+        }
+
+        /// <summary>
+        /// Registers a static method as a Lua function (global or table field)
+        /// <br/>
+        /// The method may have any signature
+        /// </summary>
         public LuaFunction RegisterFunction(string path, MethodBase function)
         {
             return RegisterFunction(path, null, function);
         }
 
-        /*
-         * Registers an object's method as a Lua function (global or table field)
-         * The method may have any signature
-         */
+        /// <summary>
+        /// Registers a object's method as a Lua function (global or table field)
+        /// <br/>
+        /// The method may have any signature
+        /// </summary>
         public LuaFunction RegisterFunction(string path, object target, MethodBase function)
         {
             // We leave nothing on the stack when we are done
@@ -1418,9 +1547,9 @@ namespace NLua
             return f;
         }
 
-        /*
-         * Compares the two values referenced by ref1 and ref2 for equality
-         */
+        /// <summary>
+        /// Compares the two values referenced by <paramref name="ref1"/> and <paramref name="ref2"/> for equality
+        /// </summary>
         internal bool CompareRef(int ref1, int ref2)
         {
             int top = _luaState.GetTop();

@@ -25,9 +25,9 @@ namespace LoadFileTests
             path = Path.Combine (path, name);
             return path;
         }
-        /*
-        * Tests capturing an exception
-        */
+        /// <summary>
+        /// Tests capturing an exception
+        /// </summary>
         [Test]
         public void TestLoadFile()
         {

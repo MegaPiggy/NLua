@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\NUnit.org\nunit-console\nunit3-console.exe" "bin\Debug\NLuaTest.dll"

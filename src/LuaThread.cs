@@ -8,11 +8,17 @@ using LuaState = KeraLua.Lua;
 
 namespace NLua
 {
+    /// <summary>
+    /// A lua thread
+    /// </summary>
     public class LuaThread : LuaBase, IEquatable<LuaThread>, IEquatable<LuaState>, IEquatable<Lua>
     {
         private LuaState _luaState;
         private ObjectTranslator _translator;
 
+        /// <summary>
+        /// Lua state object
+        /// </summary>
         public LuaState State => _luaState;
 
         /// <summary>
@@ -38,9 +44,10 @@ namespace NLua
             _translator = interpreter.Translator;
         }
 
-        /*
-         * Resets this thread, cleaning its call stack and closing all pending to-be-closed variables.
-         */
+        /// <summary>
+        /// Resets this thread, cleaning its call stack and closing all pending to-be-closed variables.
+        /// </summary>
+        /// <returns>a status code</returns>
         public int Reset()
         {
             int oldTop = _luaState.GetTop();
@@ -51,6 +58,9 @@ namespace NLua
             return statusCode;
         }
 
+        /// <summary>
+        /// Exchange values between different threads of the same state.
+        /// </summary>
         public void XMove(LuaState to, object val, int index = 1)
         {
             int oldTop = _luaState.GetTop();
@@ -61,6 +71,9 @@ namespace NLua
             _luaState.SetTop(oldTop);
         }
 
+        /// <summary>
+        /// Exchange values between different threads of the same state.
+        /// </summary>
         public void XMove(Lua to, object val, int index = 1)
         {
             int oldTop = _luaState.GetTop();
@@ -71,6 +84,9 @@ namespace NLua
             _luaState.SetTop(oldTop);
         }
 
+        /// <summary>
+        /// Exchange values between different threads of the same state.
+        /// </summary>
         public void XMove(LuaThread thread, object val, int index = 1)
         {
             int oldTop = _luaState.GetTop();
@@ -81,9 +97,9 @@ namespace NLua
             _luaState.SetTop(oldTop);
         }
 
-        /*
-         * Pushes this thread into the Lua stack
-         */
+        /// <summary>
+        /// Pushes this thread into the Lua stack
+        /// </summary>
         internal void Push(LuaState luaState)
         {
             luaState.GetRef(_Reference);
@@ -103,7 +119,7 @@ namespace NLua
                 return this.State == interpreter.State;
             else if (obj is LuaState state)
                 return this.State == state;
-            return false;
+            return base.Equals(obj);
         }
 
         public override int GetHashCode()

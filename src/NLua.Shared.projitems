@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)LuaBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LuaFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LuaLightUserData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Luau.cs" />
     <None Include="$(MSBuildThisFileDirectory)LuaDate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LuaFunction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LuaGlobalAttribute.cs" />

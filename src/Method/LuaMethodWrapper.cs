@@ -50,7 +50,618 @@ namespace NLua.Method
             _method = method;
             _methodName = method.Name;
             _isStatic = method.IsStatic;
+        }
 
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object, object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object, object, object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object, object, object, object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object, object, object, object, object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object, object, object, object, object, object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object, object, object, object, object, object, object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object, object, object, object, object, object, object, object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object, object, object, object, object, object, object, object, object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object, object, object, object, object, object, object, object, object, object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object, object, object, object, object, object, object, object, object, object, object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object, object, object, object, object, object, object, object, object, object, object, object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object, object, object, object, object, object, object, object, object, object, object, object, object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Action instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Action<object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object> action)
+        {
+            MethodBase method = (MethodBase)action.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = action.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object, object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object, object, object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object, object, object, object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object, object, object, object, object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object, object, object, object, object, object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object, object, object, object, object, object, object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object, object, object, object, object, object, object, object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object, object, object, object, object, object, object, object, object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object, object, object, object, object, object, object, object, object, object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object, object, object, object, object, object, object, object, object, object, object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
+        }
+
+        /// <summary>
+        /// Constructs the wrapper for a known Func instance
+        /// </summary>
+        public LuaMethodWrapper(ObjectTranslator translator, Func<object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object> func)
+        {
+            MethodBase method = (MethodBase)func.Method;
+
+            InvokeFunction = Call;
+            _translator = translator;
+            _target = func.Target;
+            _extractTarget = translator.typeChecker.GetExtractor(new ProxyType(method.DeclaringType));
+            _lastCalledMethod = new MethodCache();
+
+            _method = method;
+            _methodName = method.Name;
+            _isStatic = method.IsStatic;
         }
 
         /// <summary>

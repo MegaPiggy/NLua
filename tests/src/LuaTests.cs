@@ -3087,7 +3087,7 @@ namespace NLuaTest
             var tc = new TestClass();
             tc.LongValue = 5;
             
-            using (Lua lua = new Lua(maxRecursion))
+            using (Lua lua = new Lua(maxRecursion: maxRecursion))
             {
                 lua.LoadCLRPackage();
                 lua["myTc"] = tc;

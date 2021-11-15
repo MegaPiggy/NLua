@@ -43,3 +43,4 @@ tests/build/xamarintvos/result.xml
 build/net5.0/obj
 TestResult.xml
 .vshistory
+build/net6.0/obj

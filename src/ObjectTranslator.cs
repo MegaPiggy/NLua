@@ -10,7 +10,7 @@ using NLua.Method;
 using NLua.Exceptions;
 using NLua.Extensions;
 
-#if __IOS__ || __TVOS__ || __WATCHOS__
+#if __IOS__ || __TVOS__ || __WATCHOS__ || __MACCATALYST__
     using ObjCRuntime;
 #endif
 
@@ -1238,7 +1238,7 @@ namespace NLua
             return 2;
         }
 
-#if __IOS__ || __TVOS__ || __WATCHOS__
+#if __IOS__ || __TVOS__ || __WATCHOS__ || __MACCATALYST__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
         private static int CType(IntPtr luaState)
@@ -1258,7 +1258,7 @@ namespace NLua
             return 1;
         }
 
-#if __IOS__ || __TVOS__ || __WATCHOS__
+#if __IOS__ || __TVOS__ || __WATCHOS__ || __MACCATALYST__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
         private static int EnumFromInt(IntPtr luaState)

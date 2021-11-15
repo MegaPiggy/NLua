@@ -10,7 +10,7 @@ using NLua.Method;
 using NLua.Exceptions;
 using NLua.Extensions;
 
-#if __IOS__ || __TVOS__ || __WATCHOS__
+#if __IOS__ || __TVOS__ || __WATCHOS__ || __MACCATALYST__
     using ObjCRuntime;
 #endif
 
@@ -283,9 +283,9 @@ namespace NLua
         /// <summary>
         /// Create a new lua state
         /// </summary>
-        public Lua(int maxRecursion = 2)
+        public Lua(bool openLibs = true, int maxRecursion = 2)
         {
-            _luaState = new LuaState();
+            _luaState = new LuaState(openLibs);
             Init(maxRecursion);
             // We need to keep this in a managed reference so the delegate doesn't get garbage collected
             _luaState.AtPanic(PanicCallback);
@@ -372,7 +372,7 @@ namespace NLua
             _luaState = null;
         }
 
-#if __IOS__ || __TVOS__ || __WATCHOS__
+#if __IOS__ || __TVOS__ || __WATCHOS__ || __MACCATALYST__
         [MonoPInvokeCallback(typeof(LuaNativeFunction))]
 #endif
         static int PanicCallback(IntPtr state)
@@ -1251,7 +1251,7 @@ namespace NLua
         /// <param name = "luaState">lua state</param>
         /// <param name = "luaDebug">Pointer to LuaDebug (lua_debug) structure</param>
         /// 
-#if __IOS__ || __TVOS__ || __WATCHOS__
+#if __IOS__ || __TVOS__ || __WATCHOS__ || __MACCATALYST__
         [MonoPInvokeCallback(typeof(LuaHookFunction))]
 #endif
         static void DebugHookCallback(IntPtr luaState, IntPtr luaDebug)

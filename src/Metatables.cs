@@ -11,7 +11,7 @@ using KeraLua;
 using NLua.Method;
 using NLua.Extensions;
 
-#if __IOS__ || __TVOS__ || __WATCHOS__
+#if __IOS__ || __TVOS__ || __WATCHOS__ || __MACCATALYST__
     using ObjCRuntime;
 #endif
 

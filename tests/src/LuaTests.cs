@@ -2690,6 +2690,8 @@ namespace NLuaTest
         {
             using (Lua lua = new Lua())
             {
+                lua.DisposePackages();
+
                 int before = lua.State.GarbageCollector(LuaGC.Count, 0);
 
                 for (int i = 0; i < 1000; i++)
@@ -2711,8 +2713,12 @@ namespace NLuaTest
 
                 // The ratio two is very uncertain, lets use 5x, just to have some certain that 
                 // the gc collect the tables
-                Assert.True( ratio2 >= 2 , "#1:" + ratio2);
-                Assert.True( ratio <= 1,  "#2:" + ratio);
+                //Assert.True( ratio2 >= 2 , "#1:" + ratio2);
+                Assert.GreaterOrEqual(ratio2, 2, "#1:" + ratio2 + " (" + after1 + " / " + after2 + ")");
+                //Assert.True(ratio <= 1, "#2:" + ratio);
+                Assert.LessOrEqual(ratio, 1, "#2:" + ratio + " (" + after2 + " / " + before + ")");
+
+                Console.WriteLine(ratio + " & " + ratio2);
             }
         }
 
@@ -3081,13 +3087,18 @@ namespace NLuaTest
             var tc = new TestClass();
             tc.LongValue = 5;
             
-            using (Lua lua = new Lua())
+            using (Lua lua = new Lua(maxRecursion))
             {
-                lua.MaximumRecursion = maxRecursion;
                 lua.LoadCLRPackage();
                 lua["myTc"] = tc;
-                
-                if(maxRecursion == 0)
+
+                //int index = 0;
+                //Console.WriteLine("mr = " + maxRecursion);
+                //Console.WriteLine("Global Count = " + lua.Globals.Count());
+                //foreach (string global in lua.Globals)
+                //    Console.WriteLine("Global #" + (index++) + ": " + global);
+
+                if (maxRecursion == 0)
                     Assert.AreEqual(1,lua.Globals.Count(), "#1"); //register only the root reference
                 else
                     Assert.IsTrue(lua.Globals.Count() > 1, "#1"); //many globals registered (all sub properties)

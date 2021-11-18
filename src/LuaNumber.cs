@@ -1100,7 +1100,7 @@ namespace NLua
 
         public static explicit operator LuaNumber(DateTime dt) => new LuaNumber(dt);
 
-        public static implicit operator double(LuaNumber ln)
+        public static explicit operator double(LuaNumber ln)
         {
             if (ln.number is double dpfpn)
                 return dpfpn;
@@ -1214,7 +1214,7 @@ namespace NLua
             return 0;
         }
 
-        public static implicit operator long(LuaNumber ln)
+        public static explicit operator long(LuaNumber ln)
         {
             if (ln.number is double dpfpn)
                 return Convert.ToInt64(dpfpn);

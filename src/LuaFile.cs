@@ -271,19 +271,19 @@ namespace NLua
 		/// Gets the current file position.
 		/// </summary>
 		/// <returns>the final file position, measured in bytes from the beginning of the file.</returns>
-		public long Seek() => new LuaNumber(CallFunction("seek").FirstOrDefault());
+		public long Seek() => (long)new LuaNumber(CallFunction("seek").FirstOrDefault());
 
 		/// <summary>
 		/// Sets and gets the file position, measured from the beginning of the file, to the position of the <paramref name="whence"/>.
 		/// </summary>
 		/// <returns>the final file position, measured in bytes from the beginning of the file.</returns>
-		public long Seek(Whence whence) => new LuaNumber(CallFunction("seek", whence.ToString().ToLowerInvariant()).FirstOrDefault());
+		public long Seek(Whence whence) => (long)new LuaNumber(CallFunction("seek", whence.ToString().ToLowerInvariant()).FirstOrDefault());
 
 		/// <summary>
 		/// Sets and gets the file position, measured from the beginning of the file, to the position of the <paramref name="whence"/> with an <paramref name="offset"/>.
 		/// </summary>
 		/// <returns>the final file position, measured in bytes from the beginning of the file.</returns>
-		public long Seek(Whence whence, int offset) => new LuaNumber(CallFunction("seek", whence.ToString().ToLowerInvariant(), offset).FirstOrDefault());
+		public long Seek(Whence whence, int offset) => (long)new LuaNumber(CallFunction("seek", whence.ToString().ToLowerInvariant(), offset).FirstOrDefault());
 
 		///// <summary>
 		///// Sets and gets the file position, measured from the beginning of the file, to the position given by <paramref name="offset"/>.

@@ -637,7 +637,7 @@ namespace NLuaTest
             using (Lua lua = new Lua())
             {
                 lua.DoString("a=2");
-                double num = lua.GetNumber("a");
+                double num = (double)lua.GetNumber("a");
                 //Console.WriteLine("a="+num);
                 Assert.AreEqual(num, 2d);
             }
@@ -652,7 +652,7 @@ namespace NLuaTest
             {
                 lua.DoString("a=2");
                 lua["a"] = 3;
-                double num = lua.GetNumber("a");
+                double num = (double)lua.GetNumber("a");
 
                 Assert.AreEqual(num, 3d);
             }
@@ -667,7 +667,7 @@ namespace NLuaTest
             using (Lua lua = new Lua())
             {
                 lua.DoString("a={b={c=2}}");
-                double num = lua.GetNumber("a.b.c");
+                double num = (double)lua.GetNumber("a.b.c");
                 //Console.WriteLine("a.b.c="+num);
                 Assert.AreEqual(num, 2d);
             }
@@ -683,7 +683,7 @@ namespace NLuaTest
             {
                 lua.DoString("a={b={c=2}}");
                 lua["a.b.c"] = 3;
-                double num = lua.GetNumber("a.b.c");
+                double num = (double)lua.GetNumber("a.b.c");
                 //Console.WriteLine("a.b.c="+num);
                 Assert.AreEqual(num, 3d);
             }
@@ -757,7 +757,7 @@ namespace NLuaTest
                 lua.DoString("a={b={c=2}}\nb={c=3}");
                 LuaTable tab = lua.GetTable("b");
                 lua["a.b"] = tab;
-                double num = lua.GetNumber("a.b.c");
+                double num = (double)lua.GetNumber("a.b.c");
                 Assert.AreEqual(num, 3d);
             }
         }
@@ -801,7 +801,7 @@ namespace NLuaTest
                 lua.DoString("a={b={c=2}}");
                 LuaTable tab = lua.GetTable("a.b");
                 tab["c"] = 3;
-                double num = lua.GetNumber("a.b.c");
+                double num = (double)lua.GetNumber("a.b.c");
                 Assert.AreEqual(num, 3d);
             }
         }
@@ -817,7 +817,7 @@ namespace NLuaTest
                 lua.DoString("a={b={c=2}}");
                 LuaTable tab = lua.GetTable("a");
                 tab["b.c"] = 3;
-                double num = lua.GetNumber("a.b.c");
+                double num = (double)lua.GetNumber("a.b.c");
                 Assert.AreEqual(num, 3d);
             }
         }
@@ -905,7 +905,7 @@ namespace NLuaTest
             {
                 lua.DoString("a=2\nfunction f(x)\na=a+x\nend");
                 lua.GetFunction("f").Call(1);
-                double num = lua.GetNumber("a");
+                double num = (double)lua.GetNumber("a");
                 Assert.AreEqual(num, 3d);
             }
         }
@@ -919,7 +919,7 @@ namespace NLuaTest
             {
                 lua.DoString("a=2\nfunction f(x,y)\na=x+y\nend");
                 lua.GetFunction("f").Call(1, 3);
-                double num = lua.GetNumber("a");
+                double num = (double)lua.GetNumber("a");
                 Assert.AreEqual(num, 4d);
             }
         }
@@ -1985,7 +1985,7 @@ namespace NLuaTest
                              co_routine = coroutine.create(yielder);
                              while coroutine.resume(co_routine) do end;");
 
-                double num = lua.GetNumber("a");
+                double num = (double)lua.GetNumber("a");
                 Assert.AreEqual(num, 2d);
             }
         }
@@ -2032,7 +2032,7 @@ namespace NLuaTest
                 thread.Reset(); // removes yielder
                 lua.XMove(thread, afterReset); // adds afterReset
                 resume.Call(thread); //prints after reset
-                double num = lua.GetNumber("a"); //gets 4
+                double num = (double)lua.GetNumber("a"); //gets 4
                 Assert.AreEqual(num, 4d);
             }
         }
